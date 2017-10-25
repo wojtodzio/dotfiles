@@ -27,3 +27,5 @@
 	gpgsign = true
 [gpg]
 	program = /usr/local/bin/gpg
+[rebase]
+	autosquash = true
