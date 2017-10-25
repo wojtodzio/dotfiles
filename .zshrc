@@ -1,3 +1,11 @@
+# Use HEREDOC to Pass commands which should be loaded last
+export _POST_LOAD=""
+_post_load() {
+  while IFS="\n" read -r read_heredoc_line; do
+    _POST_LOAD+="\n$read_heredoc_line"
+  done
+}
+
 # Path to my oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -32,5 +40,11 @@ source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.z
 ## Suggests commands as you type based on your commands history
 source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-# Load rbenv
-eval "$(rbenv init -)"
+# Load asdf version manager
+# https://github.com/asdf-vm/asdf
+. $HOME/.asdf/asdf.sh
+
+# Load commands which were marked to be loaded last
+while read -r i; do
+  eval $i
+done < <(echo $_POST_LOAD)

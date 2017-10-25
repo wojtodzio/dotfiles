@@ -23,11 +23,6 @@ export CFLAGS="-I$HOMEBREW_PREFIX_OPENSSL/include"
 export LDFLAGS="-L$HOMEBREW_PREFIX_OPENSSL/lib"
 
 
-# NVM
-
-export NVM_DIR=~/.nvm
-
-
 # GPG
 
 export GPG_TTY=$(tty)

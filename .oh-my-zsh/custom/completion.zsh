@@ -46,3 +46,7 @@ _fzf_complete_gco_post() {
 ## FZF completion
 [[ $- == *i* ]] && source "/usr/local/opt/fzf/shell/completion.zsh" 2> /dev/null
 
+# asdf version manager
+_post_load <<END
+. $HOME/.asdf/completions/asdf.bash
+END
