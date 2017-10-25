@@ -30,11 +30,10 @@ _fzf_complete_pass() {
 
 ## gco completion
 _fzf_complete_gco() {
-    ARGS="$@"
     local branches
     branches=$(git branch -vv --all)
     _fzf_complete "--reverse --multi" "$@" < <(
-        echo $branches
+        echo "$branches"
     )
 }
 

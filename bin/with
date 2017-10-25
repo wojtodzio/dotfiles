@@ -28,11 +28,11 @@ run_with()
   while IFS="" read -r -e -d $'\n' -p "$pmpt> " options; do
     history -s "$options"
 
-    curr_command="$(echo $options | { read first rest ; echo $first ; })"
+    curr_command="$(echo "$options" | { read first rest ; echo "$first" ; })"
     case $curr_command in
         "" )
           # null case: run prefix
-          ${prefix[@]} ;;
+          "${prefix[@]}" ;;
         "-" )
           # remove with
           drop_with
@@ -60,13 +60,13 @@ declare -a prefix
 prefix=( "$@" )
 pmpt=${prefix[*]}
 
-type $1 2>&1 > /dev/null
+type $1 > /dev/null 2>&1
 program_installed=$?
 if [ ! $program_installed -eq 0 ]; then
-  echo "error: Program" $1 "is not installed"
+  echo "error: Program" "$1" "is not installed"
   exit 1
 fi
 
-while [ true ]; do
+while true; do
   run_with
 done

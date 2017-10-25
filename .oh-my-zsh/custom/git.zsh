@@ -44,8 +44,7 @@ join-lines() {
 
 ## Bind _fg{f,b,h} to ^g^{f,b,h}
 bind-git-helper() {
-  local char
-  for c in $@; do
+  for c in "$@"; do
     eval "fzf-g$c-widget() { local result=\$(_fg$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"
     eval "zle -N fzf-g$c-widget"
     eval "bindkey '^g^$c' fzf-g$c-widget"
@@ -53,4 +52,3 @@ bind-git-helper() {
 }
 bind-git-helper f b h
 unset -f bind-git-helper
-

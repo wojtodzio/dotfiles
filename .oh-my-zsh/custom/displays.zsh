@@ -7,8 +7,8 @@ both_monitors() {
   local brightness="$1"
   local contrast="$2"
 
-  first_monitor -b $brightness -c $contrast
-  second_monitor -b $brightness -c $contrast
+  first_monitor -b "$brightness" -c "$contrast"
+  second_monitor -b "$brightness" -c "$contrast"
 }
 
 alias monitors_normal_settings='both_monitors 15 60'

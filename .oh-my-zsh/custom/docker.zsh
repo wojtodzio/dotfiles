@@ -35,5 +35,5 @@ dspec() {
 docker-remove-container-by-name() {
   local name="$1";
 
-  docker ps -a | awk '{ print $1,$2 }' | grep $NAME | awk '{print $1 }' | xargs -I {} docker rm {}
+  docker ps -a | awk '{ print $1,$2 }' | grep "$name" | awk '{print $1 }' | xargs -I {} docker rm {}
 }

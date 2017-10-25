@@ -47,9 +47,9 @@ source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # Load asdf version manager
 # https://github.com/asdf-vm/asdf
-. $HOME/.asdf/asdf.sh
+. "$HOME/.asdf/asdf.sh"
 
 # Load commands which were marked to be loaded last
 while read -r i; do
-  eval $i
-done < <(echo $_POST_LOAD)
+  eval "$i"
+done < <(echo "$_POST_LOAD")

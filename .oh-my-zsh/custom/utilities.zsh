@@ -2,7 +2,7 @@
 
 weather() {
   local city="${1:-'Bielsko'}"
-  curl -4 http://wttr.in/$city
+  curl -4 http://wttr.in/"$city"
 }
 
 ## Figlet fuzzy font selector with preview => copy to clipboard
@@ -15,13 +15,12 @@ fgl() (
 
 ## Fuzzy pass selector => copy to clipboard
 fp() {
-  local key=$(for i in ~/.password-store/*; do echo $(basename ${i%%.gpg}); done | fzf)
-  [ -n "$key" ] && pass -c $key
+  local key=$(for i in ~/.password-store/*; do basename "${i%%.gpg}"; done | fzf)
+  [ -n "$key" ] && pass -c "$key"
 }
 
 ## Fuzzy pass selector => show full info
 fpf() {
-  local key=$(for i in ~/.password-store/*; do echo $(basename ${i%%.gpg}); done | fzf)
-  [ -n "$key" ] && pass $key
+  local key=$(for i in ~/.password-store/*; do basename "${i%%.gpg}"; done | fzf)
+  [ -n "$key" ] && pass "$key"
 }
-
