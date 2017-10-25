@@ -8,3 +8,6 @@ alias '$'='command -v'
 
 ## Explain function
 alias '$f'='declare -f'
+
+## Use ripgrap pipe-grep
+alias -g G='| rg'
