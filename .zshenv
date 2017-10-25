@@ -1,47 +1,33 @@
 # PATH
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
 
-
 # Language environment
-
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-
 # Use vim as default editor
-
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
-
 # Use Homebrew OpenSSL
-
 ## brew --prefix openssl = /usr/local/opt/openssl
 ## I'm using hardcoded value to speed up shell start
 export HOMEBREW_PREFIX_OPENSSL="/usr/local/opt/openssl"
 export CFLAGS="-I$HOMEBREW_PREFIX_OPENSSL/include"
 export LDFLAGS="-L$HOMEBREW_PREFIX_OPENSSL/lib"
 
-
 # GPG
-
 export GPG_TTY=$(tty)
 
-
 # Setup lesspipe for better less for binary files
-
 export LESSOPEN="|/usr/local/bin/lesspipe.sh %s" LESS_ADVANCED_PREPROCESSOR=1
 
-
 # Homebrew
-
 ## I'm using hardcoded value to speed up shell start
 export HOMEBREW_PREFIX="/usr/local"
 export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.homebrew_github_api_token)"
 
-
 # FZF
-
 ## Use fd for rast dir/path traversal
 export FZF_DEFAULT_COMMAND="/usr/local/bin/fd --hidden --no-ignore '' 2>/dev/null"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

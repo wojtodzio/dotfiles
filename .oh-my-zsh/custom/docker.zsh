@@ -1,6 +1,8 @@
 # Docker related
 
 alias dcdev='docker-compose -f docker-compose.dev.yml'
+
+# Find container matching given name part
 find-container() {
   local container_name_contains="$1"
   local compose_file="${2:-docker-compose.dev.yml}"
@@ -10,6 +12,8 @@ find-container() {
 END
 }
 
+# Run command in containner of a given name part with resolving alias if command is single-worded
+## TODO: Resolve whole command as on host system, e.g. change RET rdm to RAILS_ENV=test rake db:migrate
 dcrun() {
   local container="$(find-container $1)"
 
@@ -19,7 +23,7 @@ dcrun() {
     echo "More than one container matching:"
     echo "$container"
   else
-    local container_id="$(dcdev ps -q backend)"
+    local container_id="$(dcdev ps -q $container)"
     local alias=$(whence "${@:2}" || echo "${@:2}")
     local command="docker exec -it $container_id $alias"
 
@@ -28,6 +32,7 @@ dcrun() {
   fi
 }
 
+# Run given spec in spring on backend
 dspec() {
   dcrun backend "spring rspec $1"
 }

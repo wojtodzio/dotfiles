@@ -1,5 +1,5 @@
 # Use HEREDOC to Pass commands which should be loaded last
-export _POST_LOAD=""
+_POST_LOAD=""
 _post_load() {
   while IFS="\n" read -r read_heredoc_line; do
     _POST_LOAD+="\n$read_heredoc_line"

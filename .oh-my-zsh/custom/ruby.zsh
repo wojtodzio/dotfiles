@@ -2,7 +2,7 @@
 
 alias re='pry-remote'
 
-## Eval passed commands (inside HEREDOC) with global version of Ruby
+# Eval passed commands (inside HEREDOC) with global version of Ruby
 inline_global_ruby() {
   export ASDF_RUBY_VERSION="$(cat ~/.tool-versions G ruby | cut -d ' ' -f 2)"
 

@@ -7,8 +7,7 @@ alias battery_time='pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto \
 alias current_finder_path='osascript -e "tell app \"Finder\" to \
                             POSIX path of (insertion location as alias)"'
 
-
-## Fuzzy file finder with syntax-higlighted preview
+# Fuzzy file finder with syntax-higlighted preview
 pfzf() {
   fzf --preview '[[ $(file --mime {}) =~ binary ]] &&
                    echo {} is a binary file ||

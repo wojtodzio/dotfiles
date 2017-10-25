@@ -7,7 +7,7 @@ is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 
-## Fuzzy status viewer with changes preview
+# Fuzzy status viewer with changes preview
 _fgf() {
   is_in_git_repo || return
   git -c color.status=always status --short |
@@ -15,7 +15,7 @@ _fgf() {
       --preview 'git diff --color=always -- {-1} | diff-so-fancy | head -500' | cut -c4- | sed 's/.* -> //'
 }
 
-## Fuzzy branch selector with commits logs
+# Fuzzy branch selector with commits logs
 _fgb() {
   is_in_git_repo || return
   git branch -a --color=always | grep -v '/HEAD\s' | sort |
@@ -25,7 +25,7 @@ _fgb() {
     sed 's#^remotes/##'
 }
 
-## Fuzzy history viewer
+# Fuzzy history viewer
 _fgh() {
   is_in_git_repo || return
   git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
@@ -42,7 +42,7 @@ join-lines() {
   done
 }
 
-## Bind _fg{f,b,h} to ^g^{f,b,h}
+# Bind _fg{f,b,h} to ^g^{f,b,h}
 bind-git-helper() {
   for c in "$@"; do
     eval "fzf-g$c-widget() { local result=\$(_fg$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"

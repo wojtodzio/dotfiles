@@ -3,11 +3,11 @@
 alias cd..='cd ..'
 alias zsh_reload='source ~/.zshrc'
 
-## Explain command
+# Explain command
 alias '$'='command -v'
 
-## Explain function
+# Explain function
 alias '$f'='declare -f'
 
-## Use ripgrap pipe-grep
+# Use ripgrep as a pipe-grep
 alias -g G='| rg'

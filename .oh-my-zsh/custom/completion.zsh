@@ -1,11 +1,11 @@
 # Completion
 
-## Enable zsh-completions
+# Enable zsh-completions
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 
-## Use fd in fzf for rast dir/path completion
-## https://github.com/sharkdp/fd
+# Use fd in fzf for rast dir/path completion
+# https://github.com/sharkdp/fd
 _fzf_compgen_path() {
   echo "$1"
   /usr/local/bin/fd --hidden --no-ignore '' "$1" 2>/dev/null
@@ -15,8 +15,7 @@ _fzf_compgen_dir() {
   /usr/local/bin/fd --hidden --no-ignore --type d '' "$1" 2>/dev/null
 }
 
-
-## Pass completion
+# Pass completion
 _fzf_complete_pass() {
   _fzf_complete '+m' "$@" < <(
     pwdir=${PASSWORD_STORE_DIR-~/.password-store/}
@@ -27,8 +26,7 @@ _fzf_complete_pass() {
   )
 }
 
-
-## gco completion
+# gco completion
 _fzf_complete_gco() {
     local branches
     branches=$(git branch -vv --all)
@@ -41,8 +39,7 @@ _fzf_complete_gco_post() {
     awk '{print $1}'
 }
 
-
-## FZF completion
+# FZF completion
 [[ $- == *i* ]] && source "/usr/local/opt/fzf/shell/completion.zsh" 2> /dev/null
 
 # asdf version manager
