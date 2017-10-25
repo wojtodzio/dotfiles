@@ -31,3 +31,9 @@ dcrun() {
 dspec() {
   dcrun backend "spring rspec $1"
 }
+
+docker-remove-container-by-name() {
+  local name="$1";
+
+  docker ps -a | awk '{ print $1,$2 }' | grep $NAME | awk '{print $1 }' | xargs -I {} docker rm {}
+}
