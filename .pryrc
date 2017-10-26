@@ -69,3 +69,15 @@ def rs
 rescue
   false
 end
+
+def hr
+ '-' * (`stty size`.split(' ').last.to_i)
+end
+
+def procrastinate(page = 1)
+  uri    = URI.parse("http://anonimowe.pl/#{page}")
+  page   = Net::HTTP.get(uri)
+  parsed = Nokogiri::HTML.parse(page)
+
+  puts parsed.xpath('//article/section').map(&:text).join("\n" + hr + "\n")
+end
