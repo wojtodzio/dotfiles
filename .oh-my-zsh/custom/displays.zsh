@@ -1,8 +1,8 @@
 # Native display settings by DDC using ddcctl tool
 # https://github.com/kfix/ddcctl
 
-alias first_monitor="ddcctl -d 2"
-alias second_monitor="ddcctl -d 3"
+alias first_monitor="ddcctl -d 1"
+alias second_monitor="ddcctl -d 2"
 both_monitors() {
   local brightness="$1"
   local contrast="$2"
