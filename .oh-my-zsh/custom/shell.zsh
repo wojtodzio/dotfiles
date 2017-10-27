@@ -10,4 +10,6 @@ alias '$'='command -v'
 alias '$f'='declare -f'
 
 # Use ripgrep as a pipe-grep
-alias -g G='| rg'
+_post_load <<END
+  alias -g G='| rg'
+END
