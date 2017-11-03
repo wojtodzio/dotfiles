@@ -8,7 +8,7 @@ find-container() {
   local compose_file="${2:-docker-compose.dev.yml}"
 
   inline_global_ruby <<'END'
-    ruby -e "require 'YAML'; puts YAML.load(File.read('$compose_file'))['services'].keys" | grep "$container_name_contains"
+    ruby -r yaml -e "puts YAML.load(File.read('$compose_file'))['services'].keys" | grep "$container_name_contains"
 END
 }
 
