@@ -74,10 +74,22 @@ def hr
  '-' * (`stty size`.split(' ').last.to_i)
 end
 
-def procrastinate(page = 1)
-  uri    = URI.parse("http://anonimowe.pl/#{page}")
-  page   = Net::HTTP.get(uri)
-  parsed = Nokogiri::HTML.parse(page)
+def procrastinate(page = 1, with_comments: true)
+  uri      = URI.parse("http://anonimowe.pl/#{page}")
+  page     = Net::HTTP.get(uri)
+  parsed   = Nokogiri::HTML.parse(page)
+  articles = parsed.xpath('//article')
 
-  puts parsed.xpath('//article/section').map(&:text).join("\n" + hr + "\n")
+  text = articles.map do |article|
+      id       = article.xpath('header/h3/a').text
+      section  = article.xpath('section').text
+      comments = article.xpath('div/div/section/section/p').map(&:text).join
+
+      ["id: #{id}", section, ("Comments: #{comments}" if with_comments)].join("\n")
+  end
+
+  pager      = Pry::Pager.new(Pry.new(Pry.config))
+  final_text = text.join("\n#{hr}\n")
+
+  pager.page(final_text)
 end
