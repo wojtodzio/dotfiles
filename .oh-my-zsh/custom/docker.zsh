@@ -24,8 +24,7 @@ dcrun() {
     echo "$container"
   else
     local container_id="$(dcdev ps -q $container)"
-    local alias=$(whence "${@:2}" || echo "${@:2}")
-    local command="docker exec -it $container_id $alias"
+    local command="docker exec -it $container_id ${@:2}"
 
     echo "Running $command"
     eval "$command"
