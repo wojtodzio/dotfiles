@@ -2,6 +2,7 @@
 
 alias cd..='cd ..'
 alias zsh_reload='source ~/.zshrc'
+alias path='tr ":" "\n" <<< "$PATH"'
 
 # Explain command or function
 '$'() {
