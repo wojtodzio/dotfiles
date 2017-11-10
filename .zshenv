@@ -28,13 +28,16 @@ export HOMEBREW_PREFIX="/usr/local"
 export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.homebrew_github_api_token)"
 
 # FZF
+## Show certain number of lines in preview window
+export FZF_PREVIEW_LINES=1000
+
 ## Use fd for rast dir/path traversal
 export FZF_DEFAULT_COMMAND="/usr/local/bin/fd --hidden --no-ignore '' 2>/dev/null"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="/usr/local/bin/fd --hidden --no-ignore --type d '' 2>/dev/null"
 
 ## Preview dir tree on alt-c
-export FZF_ALT_C_OPTS="--no-height --preview 'tree -C {} | head -500'"
+export FZF_ALT_C_OPTS="--no-height --preview 'tree -C {} | head -'$FZF_PREVIEW_LINES"
 
 ## Press ? to toggle preview for too long commands
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
@@ -48,4 +51,4 @@ export FZF_CTRL_T_OPTS="--no-height
                               highlight -o ansi -l {} ||
                               rougify {} ||
                               cat {} ||
-                              tree -C {}) 2> /dev/null | head -500'"
+                              tree -C {}) 2> /dev/null | head -'$FZF_PREVIEW_LINES"
