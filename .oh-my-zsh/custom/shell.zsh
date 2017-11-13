@@ -13,7 +13,8 @@ alias path='tr ":" "\n" <<< "$PATH"'
   fi
 }
 
-expand-aliases() {
+# expand aliases
+ea() {
   unset 'functions[_expand-aliases]'
   functions[_expand-aliases]="$@"
   (($+functions[_expand-aliases]))
