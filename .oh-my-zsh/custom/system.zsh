@@ -53,3 +53,10 @@ bip() {
     done
   fi
 }
+
+# Open Muse app for a better touch bar sound control
+# and close cnnflicting NowPlayingTouchUI
+muse() {
+  open -a Muse
+  (sleep 1 && killall NowPlayingTouchUI) &
+}
