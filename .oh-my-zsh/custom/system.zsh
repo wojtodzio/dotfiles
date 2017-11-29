@@ -60,3 +60,12 @@ muse() {
   open -a Muse
   (sleep 1 && killall NowPlayingTouchUI) &
 }
+
+
+# Sudo with TouchID support
+# It does not allow for running interactive applications (e.g. VIM)
+_t() {
+  osascript -e "do shell script \"$*\" with administrator privileges"
+}
+
+alias restart_touchbar='((_t pkill "TouchBarServer" && sleep 0.5 && killall Muse && sleep 0.5 && muse) &) NUL'
