@@ -58,7 +58,7 @@ values."
 
      osx
 
-     ;; auto-completion
+     auto-completion
      ;; better-defaults
      ;; (shell :variables
      ;;        shell-default-height 30
