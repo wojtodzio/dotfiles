@@ -55,8 +55,6 @@ keep-container-up() {
     if [[ "$containerStatus" != "Up" ]]; then
       echo "$(date): $containner is not up, restarting"
       dcup -d elasticsearch;
-    else
-      echo "$(date): Everything is cool"
     fi
   done
 }
