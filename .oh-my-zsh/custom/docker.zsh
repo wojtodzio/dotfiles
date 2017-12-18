@@ -41,3 +41,22 @@ docker-remove-container-by-name() {
 
   docker ps -a | awk '{ print $1,$2 }' | grep "$name" | awk '{print $1 }' | xargs -I {} docker rm {}
 }
+
+keep-container-up() {
+  local container="$(find-container $1)"
+  local container_id="$(dcps -q $container)"
+  local container_id_short="$(echo $container_id | awk 'BEGIN{FIELDWIDTHS="12"} {print $1}')"
+  local interval="${2:-2}"
+
+  while true
+  do
+    sleep $interval
+    local containerStatus="$(docker ps G $container_id_short | awk '{ print $7 }')"
+    if [[ "$containerStatus" != "Up" ]]; then
+      echo "$(date): $containner is not up, restarting"
+      dcup -d elasticsearch;
+    else
+      echo "$(date): Everything is cool"
+    fi
+  done
+}
