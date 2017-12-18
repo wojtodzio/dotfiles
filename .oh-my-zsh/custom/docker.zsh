@@ -12,7 +12,7 @@ find-container() {
 END
 }
 
-# Run command in containner of a given name part with resolving alias if command is single-worded
+# Run command in container of a given name part with resolving alias if command is single-worded
 ## TODO: Resolve whole command as on host system, e.g. change RET rdm to RAILS_ENV=test rake db:migrate
 dcrun() {
   local container="$(find-container $1)"
@@ -53,7 +53,7 @@ keep-container-up() {
     sleep $interval
     local containerStatus="$(docker ps G $container_id_short | awk '{ print $7 }')"
     if [[ "$containerStatus" != "Up" ]]; then
-      echo "$(date): $containner is not up, restarting"
+      echo "$(date): $container is not up, restarting"
       dcup -d elasticsearch;
     fi
   done
