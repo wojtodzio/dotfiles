@@ -27,7 +27,7 @@ class String
             .gsub(/ #{command}/, "\n#{command}")
     end
 
-    if formatted.downcase.starts_with?('select')
+    if formatted.starts_with?('SELECT')
       temp = formatted.split(',').map(&:strip)
       temp [1..-1] = temp[1..-1].map do |string|
         string = ' ' * 7 + string
