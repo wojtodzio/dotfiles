@@ -40,7 +40,7 @@ class String
 end
 
 ## EMACS
-# Pry.config.pager = false if ENV["INSIDE_EMACS"]
+Pry.config.pager = false if ENV["INSIDE_EMACS"]
 Pry.config.correct_indent = false if ENV['INSIDE_EMACS']
 Pry.color = true
 
@@ -81,11 +81,11 @@ def procrastinate(page = 1, with_comments: true)
   articles = parsed.xpath('//article')
 
   text = articles.map do |article|
-      id       = article.xpath('header/h3/a').text
-      section  = article.xpath('section').text
-      comments = article.xpath('div/div/section/section/p').map(&:text).join
+    id       = article.xpath('header/h3/a').text
+    section  = article.xpath('section').text
+    comments = article.xpath('div/div/section/section/p').map(&:text).join
 
-      ["id: #{id}", section, ("Comments: #{comments}" if with_comments)].join("\n")
+    ["id: #{id}", section, ("Comments: #{comments}" if with_comments)].join("\n")
   end
 
   pager      = Pry::Pager.new(Pry.new(Pry.config))
