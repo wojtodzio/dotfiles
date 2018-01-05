@@ -41,6 +41,10 @@ class String
   end
 end
 
+if defined? ActiveRecord::Relation
+  ActiveRecord::Relation.delegate :f, to: :to_sql
+end
+
 ## EMACS
 Pry.config.pager = false if ENV["INSIDE_EMACS"]
 Pry.config.correct_indent = false if ENV['INSIDE_EMACS']
