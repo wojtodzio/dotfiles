@@ -5,24 +5,26 @@ end
 
 ## Formatting SQL strings
 class String
-  SQL_COMMANDS = %w(SELECT
+  SQL_JOINS = (%w[LEFT RIGHT FULL].reduce([]) do |accum, join_type|
+    accum << "#{join_type} JOIN" << "#{join_type} OUTER JOIN"
+  end << 'INNER JOIN').freeze
+  SQL_COMMANDS = SQL_JOINS +
+                 %w[SELECT
                     FROM
                     DISTINCT
                     WHERE
                     AND
-                    GROUP
+                    GROUP\ By
                     ORDER
                     HAVING
                     INSERT
                     UPDATE
-                    DELETE
-                    INNER\ JOIN
-                    LEFT\ JOIN).freeze
+                    DELETE].freeze
 
   def f
     formatted = SQL_COMMANDS.inject(self) do |string, command|
       string.gsub(/#{command}/i, command)
-            .gsub(/[^\A]#{command}/, "\n#{command}")
+            .gsub(/ #{command}/, "\n#{command}")
     end
 
     if formatted.downcase.starts_with?('select')
@@ -71,7 +73,7 @@ rescue
 end
 
 def hr
- '-' * (`stty size`.split(' ').last.to_i)
+  '-' * (`stty size`.split(' ').last.to_i)
 end
 
 def procrastinate(page = 1, with_comments: true)
