@@ -355,6 +355,15 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
   ;; Prevent emacs from adding a comment about coding (utf-8) to files
   (setq ruby-insert-encoding-magic-comment nil)
+
+  ;; Code folding
+  (eval-after-load "hideshow"
+    '(add-to-list 'hs-special-modes-alist
+                  `(ruby-mode
+                    ,(rx (or "def" "class" "module" "do" "{" "[")) ; Block start
+                    ,(rx (or "}" "]" "end"))                       ; Block end
+                    ,(rx (or "#" "=begin"))                        ; Comment start
+                    ruby-forward-sexp nil)))
   )
 
 (defun dotspacemacs/user-config ()
