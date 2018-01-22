@@ -16,6 +16,9 @@ export HOMEBREW_PREFIX_OPENSSL="/usr/local/opt/openssl"
 export CFLAGS="-I$HOMEBREW_PREFIX_OPENSSL/include"
 export LDFLAGS="-L$HOMEBREW_PREFIX_OPENSSL/lib"
 
+# Add OpenSSL PKG_CONFIG path (required by Crystal's Lucky framework)
+export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
+
 # GPG
 export GPG_TTY=$(tty)
 
