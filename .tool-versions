@@ -3,3 +3,4 @@ nodejs 8.8.0
 elixir 1.5
 python 3.6.3 2.7.14
 crystal 0.24.1
+rust 1.24.1
