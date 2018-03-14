@@ -42,6 +42,12 @@ _fzf_complete_gco_post() {
 # FZF completion
 [[ $- == *i* ]] && source "/usr/local/opt/fzf/shell/completion.zsh" 2> /dev/null
 
+# The next line updates PATH for the Google Cloud SDK.
+source '/Users/wojtek/google-cloud-sdk/path.zsh.inc';
+
+# The next line enables shell command completion for gcloud.
+source '/Users/wojtek/google-cloud-sdk/completion.zsh.inc';
+
 # asdf version manager
 _post_load <<END
 . $HOME/.asdf/completions/asdf.bash
