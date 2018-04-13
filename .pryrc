@@ -1,4 +1,5 @@
-## Shortcut for reloading
+## Aliases defined as methods to undefined method errors
+
 def r
   reload!
 end
@@ -81,7 +82,7 @@ def hr
 end
 
 def procrastinate(page = 1, with_comments: true)
-  uri      = URI.parse("http://anonimowe.pl/#{page}")
+  uri      = URI.parse("https://anonimowe.pl/#{page}")
   page     = Net::HTTP.get(uri)
   parsed   = Nokogiri::HTML.parse(page)
   articles = parsed.xpath('//article')
