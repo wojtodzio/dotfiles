@@ -21,6 +21,11 @@ ea() {
   echo "${functions[_expand-aliases]#$'\t'}" | sed 's/_rails_command/rails/'
 }
 
+# Open a man page in Preview
+pman () {
+    man -t "${1}" | open -f -a /Applications/Preview.app
+}
+
 # Use ripgrep as a pipe-grep
 _post_load <<END
   alias -g G='| rg'
