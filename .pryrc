@@ -100,3 +100,27 @@ def procrastinate(page = 1, with_comments: true)
 
   pager.page(final_text)
 end
+
+# debug yielded parameters easily
+# enumerable.any?(&f(2))
+# ==
+# enumerable.any? { |a1, a2| puts hr, "a1: #{a1}", "a2: #{a2}", hr }
+#
+# enumerable.any?(&f('field', 'field_name'))
+# ==
+# enumerable.any? { |field, field_name| puts hr, "field: #{field}", "field_name: #{field_name}", hr }
+def f(*number_or_names)
+  if number_or_names.first.is_a?(Integer) && number_or_names.length == 1
+    number = number_or_names.first
+    args = (1..number).map { |n| "a#{n}" }
+  elsif number_or_names.all? { |name| name.is_a?(String) } && number_or_names.length >= 1
+    args = number_or_names
+  else
+    raise 'Provide either a number of arguments, or arguments names as strings'
+  end
+
+  puts_args = args.map { |arg_name| %("#{arg_name}: \#{#{arg_name}}") }
+  proc = %(Proc.new { |#{args.join(', ')}| puts "#{hr}", #{puts_args.join(', ')}, "#{hr}" })
+
+  eval(proc)
+end
