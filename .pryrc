@@ -82,6 +82,9 @@ def hr
 end
 
 def procrastinate(page = 1, with_comments: true)
+  require 'net/http'
+  require 'nokogiri'
+
   uri      = URI.parse("https://anonimowe.pl/#{page}")
   page     = Net::HTTP.get(uri)
   parsed   = Nokogiri::HTML.parse(page)
@@ -109,18 +112,39 @@ end
 # enumerable.any?(&f('field', 'field_name'))
 # ==
 # enumerable.any? { |field, field_name| puts hr, "field: #{field}", "field_name: #{field_name}", hr }
-def f(*number_or_names)
-  if number_or_names.first.is_a?(Integer) && number_or_names.length == 1
-    number = number_or_names.first
-    args = (1..number).map { |n| "a#{n}" }
-  elsif number_or_names.all? { |name| name.is_a?(String) } && number_or_names.length >= 1
-    args = number_or_names
+#
+# enumerable.any?(&f(2, 2 1))
+# ==
+# enumerable.any? { |a1, a2, (a3, a4), a5| puts hr, "a1: #{a1}", "a2: #{a2}", "a3: #{a3}", ..., hr }
+# TODO: Totally refactor this
+def f(*numbers_or_names, start_with_closure: false)
+  if numbers_or_names.first.is_a?(Integer) && numbers_or_names.length == 1
+    args      = (1..numbers_or_names.first).map { |n| "a#{n}" }
+    proc_args = args.join(', ')
+  elsif numbers_or_names.all? { |name| name.is_a?(Integer) } && numbers_or_names.length > 1
+    args = (1..numbers_or_names.sum).map { |n| "a#{n}" }
+
+    arg_num = 1
+    proc_args = numbers_or_names.map do |num_of_args_in_group|
+      (arg_num...(arg_num + num_of_args_in_group)).map { |n| "a#{n}" }.tap do
+        arg_num += num_of_args_in_group
+      end
+    end
+    inside_closure = start_with_closure
+    proc_args = proc_args.map { |args_group| args_group.join(', ') }.map do |args_group|
+      (inside_closure ? "(#{args_group})" : args_group).tap do
+        inside_closure = !inside_closure
+      end
+    end.join(', ')
+  elsif numbers_or_names.all? { |name| name.is_a?(String) } && numbers_or_names.length >= 1
+    args = numbers_or_names
+    proc_args = args.join(', ')
   else
     raise 'Provide either a number of arguments, or arguments names as strings'
   end
 
   puts_args = args.map { |arg_name| %("#{arg_name}: \#{#{arg_name}}") }
-  proc = %(Proc.new { |#{args.join(', ')}| puts "#{hr}", #{puts_args.join(', ')}, "#{hr}" })
+  proc = %(Proc.new { |#{proc_args}| puts "#{hr}", #{puts_args.join(', ')}, "#{hr}" })
 
   eval(proc)
 end
