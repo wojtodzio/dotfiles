@@ -1,5 +1,5 @@
 # PATH
-export PATH="/usr/local/bin:$HOME/bin:$PATH"
+export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH"
 
 # Language environment
 export LC_ALL=en_US.UTF-8
