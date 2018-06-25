@@ -55,3 +55,5 @@ export FZF_CTRL_T_OPTS="--no-height
                               rougify {} ||
                               cat {} ||
                               tree -C {}) 2> /dev/null | head -'$FZF_PREVIEW_LINES"
+
+source ~/.secrets

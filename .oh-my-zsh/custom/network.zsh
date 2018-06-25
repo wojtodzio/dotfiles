@@ -23,3 +23,16 @@ alias wifi_history='defaults read /Library/Preferences/SystemConfiguration/com.a
 alias current_wifi_ssid='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I \
                           | sed -e "s/^  *SSID: //p" -e d'
 alias wifi_scan='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s'
+
+# Start / Stop VPN instance
+# Usage: vpn start / vpn stop / vpn status
+vpn() {
+  case "$1" in
+    status) local command="describe-instance-status" ;;
+    start)  local command="start-instances" ;;
+    stop)   local command="stop-instances" ;;
+    *)      echo "Bad command; usage: vpn start / stop / status"; return 1 ;;
+  esac
+
+  aws ec2 "$command" --instance-ids "$VPN_INSTANCE_ID" --region "$VPN_INSTANCE_REGION"
+}
