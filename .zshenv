@@ -56,4 +56,10 @@ export FZF_CTRL_T_OPTS="--no-height
                               cat {} ||
                               tree -C {}) 2> /dev/null | head -'$FZF_PREVIEW_LINES"
 
+# Usage in scripts: eval $DEBUGGER
+export DEBUGGER='while IFS="\n" read -erp "[$(basename ${BASH_SOURCE[0]}):$LINENO]> " command_to_execute; do
+                   eval "$command_to_execute";
+                 done;
+                 echo ""'
+
 source ~/.secrets
