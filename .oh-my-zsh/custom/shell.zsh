@@ -26,6 +26,12 @@ pman () {
     man -t "${1}" | open -f -a /Applications/Preview.app
 }
 
+only_files() {
+  for i in $@; do
+    [ -f "$i" ] && echo "$i"
+  done
+}
+
 # Use ripgrep as a pipe-grep
 _post_load <<END
   alias -g G='| rg'

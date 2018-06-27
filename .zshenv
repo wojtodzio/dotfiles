@@ -60,6 +60,6 @@ export FZF_CTRL_T_OPTS="--no-height
 export DEBUGGER='while IFS="\n" read -erp "[$(basename ${BASH_SOURCE[0]}):$LINENO]> " command_to_execute; do
                    eval "$command_to_execute";
                  done;
-                 echo ""'
+                 echo'
 
 source ~/.secrets
