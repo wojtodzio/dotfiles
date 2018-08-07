@@ -58,3 +58,9 @@ bind-git-helper() {
 }
 bind-git-helper f b h
 unset -f bind-git-helper
+
+# Recreate DB schema by exectuing a drop & create & migrate in TEST env
+RETdr() {
+  RET rails db:drop db:create db:migrate
+}
+
