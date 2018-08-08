@@ -148,3 +148,14 @@ def f(*numbers_or_names, start_with_closure: false)
 
   eval(proc)
 end
+
+def copy(text)
+  text = text.join("\n") if text.is_a?(Array)
+
+  `echo "#{text}" | pbcopy`
+end
+
+def sort(text)
+  copy(text.split("\n").sort)
+end
+
