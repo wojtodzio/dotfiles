@@ -62,4 +62,8 @@ export DEBUGGER='while IFS="\n" read -erp "[$(basename ${BASH_SOURCE[0]}):$LINEN
                  done;
                  echo'
 
+# Enable history in iex
+export ERL_AFLAGS="-kernel shell_history enabled"
+
 source ~/.secrets
+
