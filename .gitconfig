@@ -29,3 +29,10 @@
 	program = /usr/local/bin/gpg
 [rebase]
 	autosquash = true
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
