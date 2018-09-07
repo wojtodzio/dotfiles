@@ -5,7 +5,7 @@ alias dcdev='docker-compose -f docker-compose.dev.yml'
 # Find container matching given name part
 find-container() {
   local container_name_contains="$1"
-  local compose_file="${2:-docker-compose.dev.yml}"
+  local compose_file="${2:-docker-compose.yml}"
 
   inline_global_ruby <<'END'
     ruby -r yaml -e "puts YAML.load(File.read('$compose_file'))['services'].keys" | grep "$container_name_contains"
@@ -23,7 +23,7 @@ dcrun() {
     echo "More than one container matching:"
     echo "$container"
   else
-    local container_id="$(dcdev ps -q $container)"
+    local container_id="$(dcps -q $container)"
     local command="docker exec -it $container_id ${@:2}"
 
     echo "Running $command"
