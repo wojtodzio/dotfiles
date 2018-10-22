@@ -113,7 +113,7 @@ end
 # ==
 # enumerable.any? { |field, field_name| puts hr, "field: #{field}", "field_name: #{field_name}", hr }
 #
-# enumerable.any?(&f(2, 2 1))
+# enumerable.any?(&f(2, 2, 1))
 # ==
 # enumerable.any? { |a1, a2, (a3, a4), a5| puts hr, "a1: #{a1}", "a2: #{a2}", "a3: #{a3}", ..., hr }
 # TODO: Totally refactor this
