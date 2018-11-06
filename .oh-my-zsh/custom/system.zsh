@@ -69,3 +69,5 @@ _t() {
 }
 
 alias restart_touchbar='((_t pkill "TouchBarServer" && sleep 0.5 && killall Muse && sleep 0.5 && muse) &) NUL'
+alias fast_relog="_t killall -HUP WindowServer"
+
