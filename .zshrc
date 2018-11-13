@@ -53,3 +53,4 @@ source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 while read -r i; do
   eval "$i"
 done < <(echo "$_POST_LOAD")
+

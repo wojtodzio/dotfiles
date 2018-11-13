@@ -64,7 +64,8 @@ values."
 
      osx
 
-     (auto-completion :variables auto-completion-enable-snippets-in-popup t)
+     (auto-completion :variables auto-completion-enable-snippets-in-popup t
+                                 spacemacs-default-company-backends '(company-tabnine))
      persistent-scratch
 
      latex
@@ -78,7 +79,11 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(vue-mode)
+   dotspacemacs-additional-packages
+   '(
+     vue-mode
+     company-tabnine
+     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
