@@ -1,5 +1,4 @@
-## Aliases defined as methods to undefined method errors
-
+## Use method instead of alias in case `reload!` is not available
 def r
   reload!
 end
@@ -60,14 +59,6 @@ if defined?(PryByebug)
 end
 
 # Refresh TTY size
-# echo "def rs
-#   puts 'Applying new TTY size...'
-#   x, y = \`stty size\`.split.map(&:to_i)
-#   Readline.set_screen_size(x, y)
-#   true
-# rescue
-#   false
-# end" >> ~/.pryrc
 def rs
   puts 'Applying new TTY size...'
   x, y = `stty size`.split.map(&:to_i)
@@ -157,5 +148,13 @@ end
 
 def sort(text)
   copy(text.split("\n").sort)
+end
+
+def catch_exception
+  begin
+    yield
+  rescue => e
+    e
+  end
 end
 
