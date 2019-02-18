@@ -49,6 +49,16 @@ source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 # https://github.com/asdf-vm/asdf
 . "$HOME/.asdf/asdf.sh"
 
+# Allow setting tab title from terminal in ITerm
+if [ $ITERM_SESSION_ID ]; then
+  DISABLE_AUTO_TITLE="true"
+fi
+
+# Set tab title to the current directory name after executing a command
+precmd() {
+  echo -ne "\033];${PWD##*/}\007"
+}
+
 # Load commands which were marked to be loaded last
 while read -r i; do
   eval "$i"
