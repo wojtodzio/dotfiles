@@ -33,7 +33,11 @@ only_files() {
 }
 
 setTabTitle() {
-    echo -ne "\033];$1\007"
+  echo -ne "\033];$1\007"
+}
+
+setTabTitlePernamently() {
+  echo -n "$1" > .tab-title
 }
 
 # Use ripgrep as a pipe-grep
