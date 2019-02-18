@@ -32,6 +32,10 @@ only_files() {
   done
 }
 
+setTabTitle() {
+    echo -ne "\033];$1\007"
+}
+
 # Use ripgrep as a pipe-grep
 _post_load <<END
   alias -g G='| rg'

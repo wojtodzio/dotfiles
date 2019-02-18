@@ -56,11 +56,14 @@ fi
 
 # Set tab title to the current directory name after executing a command
 precmd() {
-  echo -ne "\033];${PWD##*/}\007"
+  if [ -e .tab-title ]; then
+    setTabTitle "$(cat .tab-title)"
+  else
+    setTabTitle "${PWD##*/}"
+  fi
 }
 
 # Load commands which were marked to be loaded last
 while read -r i; do
   eval "$i"
 done < <(echo "$_POST_LOAD")
-
