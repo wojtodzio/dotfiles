@@ -9,12 +9,12 @@ export LANG=en_US.UTF-8
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
-# Use Homebrew OpenSSL
-## brew --prefix openssl = /usr/local/opt/openssl
-## I'm using hardcoded value to speed up shell start
-export HOMEBREW_PREFIX_OPENSSL="/usr/local/opt/openssl"
-export CFLAGS="-I$HOMEBREW_PREFIX_OPENSSL/include"
-export LDFLAGS="-L$HOMEBREW_PREFIX_OPENSSL/lib"
+# Use libc++ (llvm) from brew
+## /usr/local/opt/llvm = brew --prefix llvm
+## I'm using a hardcoded value here to speed up shell start
+export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+export CPPFLAGS="-I/usr/local/opt/llvm/include"
+export CFLAGS="-I/usr/local/opt/llvm/include"
 
 # Add OpenSSL PKG_CONFIG path (required by Crystal's Lucky framework)
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
