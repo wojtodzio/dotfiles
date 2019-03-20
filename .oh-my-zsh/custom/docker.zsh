@@ -54,7 +54,7 @@ keep-container-up() {
     local containerStatus="$(docker ps G $container_id_short | awk '{ print $7 }')"
     if [[ "$containerStatus" != "Up" ]]; then
       echo "$(date): $container is not up, restarting"
-      dcup -d elasticsearch;
+      dcup -d "$container";
     fi
   done
 }
