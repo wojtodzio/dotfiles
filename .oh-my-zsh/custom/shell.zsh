@@ -1,7 +1,7 @@
 # Shell related
 
 alias cd..='cd ..'
-alias zsh_reload='source ~/.zshrc'
+alias zsh_reload='exec zsh'
 alias path='tr ":" "\n" <<< "$PATH"'
 
 # Explain command or function
