@@ -40,6 +40,14 @@ setTabTitlePernamently() {
   echo -n "$1" > .tab-title
 }
 
+setTabTitleFromPath() {
+  if [ -e "$1/.tab-title" ]; then
+    setTabTitle "$(cat $1/.tab-title)"
+  else
+    setTabTitle "${1##*/}"
+  fi
+}
+
 # Use ripgrep as a pipe-grep
 _post_load <<END
   alias -g G='| rg'

@@ -56,10 +56,11 @@ fi
 
 # Set tab title to the current directory name after executing a command
 precmd() {
-  if [ -e .tab-title ]; then
-    setTabTitle "$(cat .tab-title)"
+  local git_toplevel_path="$(git rev-parse --show-toplevel 2> /dev/null)"
+  if [ -n "$git_toplevel_path" ]; then
+    setTabTitleFromPath "$git_toplevel_path"
   else
-    setTabTitle "${PWD##*/}"
+    setTabTitleFromPath "$PWD"
   fi
 }
 
