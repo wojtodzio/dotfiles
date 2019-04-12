@@ -34,9 +34,6 @@ unalias 'G'
 # Prevent enter from producing ^M
 stty sane
 
-# Load iTerm2 shell integration
-source "${HOME}/.iterm2_shell_integration.zsh"
-
 # Load fzf
 source ~/.fzf.zsh
 
@@ -49,8 +46,11 @@ source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 # https://github.com/asdf-vm/asdf
 . "$HOME/.asdf/asdf.sh"
 
-# Allow setting tab title from terminal in ITerm
 if [ $ITERM_SESSION_ID ]; then
+  # Load iTerm2 shell integration
+  source "${HOME}/.iterm2_shell_integration.zsh"
+
+  # Allow setting tab title from terminal in ITerm
   DISABLE_AUTO_TITLE="true"
 fi
 
