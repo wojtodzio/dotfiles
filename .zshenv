@@ -28,7 +28,6 @@ export LESSOPEN="|/usr/local/bin/lesspipe.sh %s" LESS_ADVANCED_PREPROCESSOR=1
 # Homebrew
 ## I'm using hardcoded value to speed up shell start
 export HOMEBREW_PREFIX="/usr/local"
-export HOMEBREW_GITHUB_API_TOKEN="$(cat ~/.homebrew_github_api_token)"
 
 # FZF
 ## Show certain number of lines in preview window
