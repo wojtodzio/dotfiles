@@ -31,6 +31,9 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     windows-scripts
+     python
+     typescript
      ansible
      php
      octave
@@ -64,8 +67,11 @@ values."
 
      osx
 
+     ;; (auto-completion :variables auto-completion-enable-snippets-in-popup t)
+     ;; TabNine completion
      (auto-completion :variables auto-completion-enable-snippets-in-popup t
-                                 spacemacs-default-company-backends '(company-tabnine))
+                      spacemacs-default-company-backends '(company-tabnine))
+
      persistent-scratch
 
      latex
@@ -82,6 +88,7 @@ values."
    dotspacemacs-additional-packages
    '(
      vue-mode
+
      company-tabnine
      )
    ;; A list of packages that cannot be updated.
@@ -175,6 +182,7 @@ values."
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
+   dotspacemacs-mode-line-theme 'spacemacs ;; Fix tests
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -353,6 +361,7 @@ values."
   (setq web-mode-css-indent-offset n) ; web-mode, css in html file
   (setq web-mode-code-indent-offset n) ; web-mode, js code in html file
   (setq css-indent-offset n) ; css-mode
+  (setq typescript-indent-level n)
   )
 
 (defun dotspacemacs/user-init ()
@@ -394,6 +403,8 @@ you should place your code here."
   (setq google-translate-default-target-language "pl")
   (setq neo-vc-integration '(char))
   (setq neo-theme 'nerd)
+  (setq spacemacs-default-jump-handlers
+        (remove 'evil-goto-definition spacemacs-default-jump-handlers))
 
   ;; preview latex documents
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
@@ -408,7 +419,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (jinja2-mode company-ansible ansible-doc ansible phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode company-auctex auctex-latexmk auctex ob-elixir flycheck-mix flycheck-credo alchemist elixir-mode toml-mode racer flycheck-rust cargo rust-mode ghub let-alist org-mime play-crystal inf-crystal flycheck-crystal crystal-mode typit mmt sudoku pacmacs 2048-game persistent-scratch helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern dash-functional tern company-statistics company auto-yasnippet ac-ispell auto-complete pcre2el spinner log4e gntp simple-httpd parent-mode request gitignore-mode flyspell-correct pos-tip epl flx anzu f bind-map bind-key popup org-category-capture packed iedit hydra nginx-mode powerline markdown-mode multiple-cursors inf-ruby highlight skewer-mode alert async haml-mode dash s sql-indent winum which-key web-mode robe restart-emacs projectile-rails persp-mode orgit magit-gitflow json-mode hungry-delete highlight-indentation helm-make evil-mc dumb-jump ace-window smartparens magit magit-popup evil flycheck with-editor helm helm-core yasnippet avy projectile js2-mode diminish yaml-mode ws-butler web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package undo-tree toxi-theme toc-org tagedit sublime-themes spaceline solarized-theme smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode reveal-in-osx-finder rbenv rake rainbow-delimiters pug-mode popwin pkg-info pbcopy paradox osx-trash osx-dictionary org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text monokai-theme mmm-mode minitest markdown-toc macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode launchctl json-snatcher json-reformat js2-refactor js-doc info+ inflections indent-guide htmlize hl-todo highlight-parentheses highlight-numbers hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag goto-chg google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md flyspell-correct-helm flycheck-pos-tip flx-ido fill-column-indicator feature-mode fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav column-enforce-mode color-theme-sanityinc-tomorrow coffee-mode clean-aindent-mode chruby bundler auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-link ace-jump-helm-line)))
+    (powershell yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic tide typescript-mode company-tabnine unicode-escape names jinja2-mode company-ansible ansible-doc ansible phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode company-auctex auctex-latexmk auctex ob-elixir flycheck-mix flycheck-credo alchemist elixir-mode toml-mode racer flycheck-rust cargo rust-mode ghub let-alist org-mime play-crystal inf-crystal flycheck-crystal crystal-mode typit mmt sudoku pacmacs 2048-game persistent-scratch helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern dash-functional tern company-statistics company auto-yasnippet ac-ispell auto-complete pcre2el spinner log4e gntp simple-httpd parent-mode request gitignore-mode flyspell-correct pos-tip epl flx anzu f bind-map bind-key popup org-category-capture packed iedit hydra nginx-mode powerline markdown-mode multiple-cursors inf-ruby highlight skewer-mode alert async haml-mode dash s sql-indent winum which-key web-mode robe restart-emacs projectile-rails persp-mode orgit magit-gitflow json-mode hungry-delete highlight-indentation helm-make evil-mc dumb-jump ace-window smartparens magit magit-popup evil flycheck with-editor helm helm-core yasnippet avy projectile js2-mode diminish yaml-mode ws-butler web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package undo-tree toxi-theme toc-org tagedit sublime-themes spaceline solarized-theme smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode reveal-in-osx-finder rbenv rake rainbow-delimiters pug-mode popwin pkg-info pbcopy paradox osx-trash osx-dictionary org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text monokai-theme mmm-mode minitest markdown-toc macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode launchctl json-snatcher json-reformat js2-refactor js-doc info+ inflections indent-guide htmlize hl-todo highlight-parentheses highlight-numbers hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag goto-chg google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md flyspell-correct-helm flycheck-pos-tip flx-ido fill-column-indicator feature-mode fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav column-enforce-mode color-theme-sanityinc-tomorrow coffee-mode clean-aindent-mode chruby bundler auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-link ace-jump-helm-line)))
  '(safe-local-variable-values
    (quote
     ((rspec-command-options . "--format progress --color")
@@ -429,3 +440,37 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (osx-clipboard powershell yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic tide typescript-mode company-tabnine unicode-escape names jinja2-mode company-ansible ansible-doc ansible phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode company-auctex auctex-latexmk auctex ob-elixir flycheck-mix flycheck-credo alchemist elixir-mode toml-mode racer flycheck-rust cargo rust-mode ghub let-alist org-mime play-crystal inf-crystal flycheck-crystal crystal-mode typit mmt sudoku pacmacs 2048-game persistent-scratch helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern dash-functional tern company-statistics company auto-yasnippet ac-ispell auto-complete pcre2el spinner log4e gntp simple-httpd parent-mode request gitignore-mode flyspell-correct pos-tip epl flx anzu f bind-map bind-key popup org-category-capture packed iedit hydra nginx-mode powerline markdown-mode multiple-cursors inf-ruby highlight skewer-mode alert async haml-mode dash s sql-indent winum which-key web-mode robe restart-emacs projectile-rails persp-mode orgit magit-gitflow json-mode hungry-delete highlight-indentation helm-make evil-mc dumb-jump ace-window smartparens magit magit-popup evil flycheck with-editor helm helm-core yasnippet avy projectile js2-mode diminish yaml-mode ws-butler web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package undo-tree toxi-theme toc-org tagedit sublime-themes spaceline solarized-theme smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode reveal-in-osx-finder rbenv rake rainbow-delimiters pug-mode popwin pkg-info pbcopy paradox osx-trash osx-dictionary org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text monokai-theme mmm-mode minitest markdown-toc macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode launchctl json-snatcher json-reformat js2-refactor js-doc info+ inflections indent-guide htmlize hl-todo highlight-parentheses highlight-numbers hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-gitignore helm-flx helm-descbinds helm-css-scss helm-ag goto-chg google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md flyspell-correct-helm flycheck-pos-tip flx-ido fill-column-indicator feature-mode fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav column-enforce-mode color-theme-sanityinc-tomorrow coffee-mode clean-aindent-mode chruby bundler auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-link ace-jump-helm-line)))
+ '(safe-local-variable-values
+   (quote
+    ((rspec-command-options . "--format progress --color")
+     (rspec-command-options . "--format progress --color --require spec_helper")
+     (rspec-use-spring-when-possible)
+     (rspec-docker-container . "$(docker ps | awk '{ print $1,$2 }' | grep backend | awk '{print $1 }')")
+     (rspec-use-spring-when-possible . t)
+     (rspec-use-bundler-when-possible)
+     (rspec-docker-container . "$(docker-compose -f docker-compose.dev.yml ps -q backend)")
+     (rspec-use-docker-when-possible . t)
+     (rspec-docker-container . "backend")
+     (rspec-docker-cwd . "/cbook/")
+     (rspec-spec-command . "spring rspec")
+     (rspec-docker-command . "docker exec -it")))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:background nil)))))
+)
