@@ -47,13 +47,11 @@ export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap 
 ## Preview files with syntax highlight on ctrl-t
 export FZF_CTRL_T_OPTS="--no-height
                         --bind 'ctrl-y:execute-silent(echo {} | pbcopy)+abort'
-                        --preview 'file --mime {} | grep -q "binary" &&
-                             echo {} is a binary file ||
-                             (coderay {} ||
-                              highlight -o ansi -l {} ||
-                              rougify {} ||
-                              cat {} ||
-                              tree -C {}) 2> /dev/null | head -'$FZF_PREVIEW_LINES"
+                        --preview 'file --mime {} | grep \"binary\" | grep -qv \"directory\" &&
+                                   echo {} is a binary file ||
+                                   (bat {} --color=always ||
+                                    cat {} ||
+                                    tree -C {}) 2> /dev/null | head -'$FZF_PREVIEW_LINES"
 
 # Usage in scripts: eval $DEBUGGER
 export DEBUGGER='while IFS="\n" read -erp "[$(basename ${BASH_SOURCE[0]}):$LINENO]> " command_to_execute; do
