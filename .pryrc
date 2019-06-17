@@ -113,7 +113,7 @@ def f(*numbers_or_names, start_with_closure: false)
     args      = (1..numbers_or_names.first).map { |n| "a#{n}" }
     proc_args = args.join(', ')
   elsif numbers_or_names.all? { |name| name.is_a?(Integer) } && numbers_or_names.length > 1
-    args = (1..numbers_or_names.sum).map { |n| "a#{n}" }
+    args = (1..numbers_or_names.reduce(:+)).map { |n| "a#{n}" }
 
     arg_num = 1
     proc_args = numbers_or_names.map do |num_of_args_in_group|
@@ -145,6 +145,7 @@ def copy(text)
 
   `echo "#{text}" | pbcopy`
 end
+alias_method :pbcopy, :copy # Some gems add a global `copy` method :/
 
 def sort(text)
   copy(text.split("\n").sort)
