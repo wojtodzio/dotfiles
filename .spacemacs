@@ -67,10 +67,10 @@ values."
 
      osx
 
-     ;; (auto-completion :variables auto-completion-enable-snippets-in-popup t)
+     (auto-completion :variables auto-completion-enable-snippets-in-popup t)
      ;; TabNine completion
-     (auto-completion :variables auto-completion-enable-snippets-in-popup t
-                      spacemacs-default-company-backends '(company-tabnine))
+     ;; (auto-completion :variables auto-completion-enable-snippets-in-popup t
+     ;;                  spacemacs-default-company-backends '(company-tabnine))
 
      persistent-scratch
 
@@ -89,7 +89,7 @@ values."
    '(
      vue-mode
 
-     company-tabnine
+     ;; company-tabnine
      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
