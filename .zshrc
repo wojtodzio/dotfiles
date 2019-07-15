@@ -26,7 +26,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Remove unwanted aliases from plugins
 unalias fd
-unalias rg
 unalias 'G'
 
 # Aliases and custom function are located within ZSH_CUSTOM folder
