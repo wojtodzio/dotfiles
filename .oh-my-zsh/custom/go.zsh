@@ -1,0 +1,1 @@
+alias yaegi='rlwrap yaegi'
