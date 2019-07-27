@@ -48,6 +48,15 @@ setTabTitleFromPath() {
   fi
 }
 
+setTabTitleFromContext() {
+  local git_toplevel_path="$(git rev-parse --show-toplevel 2> /dev/null)"
+  if [ -n "$git_toplevel_path" ]; then
+    setTabTitleFromPath "$git_toplevel_path"
+  else
+    setTabTitleFromPath "$PWD"
+  fi
+}
+
 # Use ripgrep as a pipe-grep
 _post_load <<END
   alias -g G='| rg'

@@ -53,15 +53,11 @@ if [ $ITERM_SESSION_ID ]; then
   DISABLE_AUTO_TITLE="true"
 fi
 
-# Set tab title to the current directory name after executing a command
-precmd() {
-  local git_toplevel_path="$(git rev-parse --show-toplevel 2> /dev/null)"
-  if [ -n "$git_toplevel_path" ]; then
-    setTabTitleFromPath "$git_toplevel_path"
-  else
-    setTabTitleFromPath "$PWD"
-  fi
+# Set tab title to the current directory name after changing a directory
+chpwd() {
+  setTabTitleFromContext
 }
+chpwd
 
 # Load commands which were marked to be loaded last
 while read -r i; do
