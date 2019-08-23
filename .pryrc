@@ -145,7 +145,7 @@ def copy(text)
 
   `echo "#{text}" | pbcopy`
 end
-alias_method :pbcopy, :copy # Some gems add a global `copy` method :/
+alias pbcopy copy # Some gems add a global `copy` method :/
 
 def sort(text)
   copy(text.split("\n").sort)
