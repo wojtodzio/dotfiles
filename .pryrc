@@ -143,7 +143,7 @@ end
 def copy(text)
   text = text.join("\n") if text.is_a?(Array)
 
-  `echo "#{text}" | pbcopy`
+  `echo '#{text}' | pbcopy`
 end
 alias pbcopy copy # Some gems add a global `copy` method :/
 
