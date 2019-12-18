@@ -1,5 +1,8 @@
 # Git related
 
+## Use hub for GitHub
+alias git=hub
+
 ## gco with fuzzy branch selector
 alias gcof='gco $(_fgb)'
 alias gds="gd --staged"
