@@ -8,6 +8,8 @@ alias gcof='gco $(_fgb)'
 alias gds="gd --staged"
 alias grbma="grbm --autostash"
 alias gupa="gup --autostash"
+alias gcwip='OVERCOMMIT_DISABLE=1 git commit --no-verify --no-gpg-sign -m "WIP"'
+
 grbia() {
   grbi "$@" --autostash
 }
