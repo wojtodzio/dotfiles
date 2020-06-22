@@ -1,5 +1,9 @@
 # PATH
-export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH"
+
+# Load asdf version manager
+# https://github.com/asdf-vm/asdf
+. "$HOME/.asdf/asdf.sh"
 
 # Language environment
 export LC_ALL=en_US.UTF-8
