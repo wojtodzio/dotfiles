@@ -41,6 +41,10 @@ source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.z
 ## Suggests commands as you type based on your commands history
 source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
+# Load asdf version manager
+# https://github.com/asdf-vm/asdf
+. "$HOME/.asdf/asdf.sh"
+
 if [ $ITERM_SESSION_ID ]; then
   # Load iTerm2 shell integration
   source "${HOME}/.iterm2_shell_integration.zsh"
