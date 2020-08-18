@@ -1,5 +1,5 @@
 # PATH
-export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH"
 
 # Language environment
 export LC_ALL=en_US.UTF-8
