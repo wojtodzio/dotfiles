@@ -3,4 +3,5 @@ pry
 gem-ctags
 solargraph
 reek
+rubocop
 
