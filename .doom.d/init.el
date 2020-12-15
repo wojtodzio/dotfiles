@@ -22,7 +22,7 @@
        (company +childframe)           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       (ivy +fuzzy +prescient)               ; a search engine for love and life
+       (ivy +prescient +childframe)               ; a search engine for love and life
 
        :ui
        ;;deft              ; notational velocity for Emacs
