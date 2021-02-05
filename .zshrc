@@ -44,6 +44,7 @@ source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 # Load asdf version manager
 # https://github.com/asdf-vm/asdf
 . "$HOME/.asdf/asdf.sh"
+. ~/.asdf/plugins/java/set-java-home.zsh
 
 if [ $ITERM_SESSION_ID ]; then
   # Load iTerm2 shell integration

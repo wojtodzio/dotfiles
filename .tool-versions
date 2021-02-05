@@ -7,4 +7,6 @@ rust 1.24.1
 golang 1.14.3
 vault 1.1.5
 terraform 0.12.29
+java openjdk-11
+clojure 1.10.2.774
 
