@@ -41,3 +41,6 @@
 	user = wojtodzio
 [pull]
 	rebase = false
+	ff = only
+[init]
+	defaultBranch = main
