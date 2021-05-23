@@ -4,7 +4,7 @@
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 
-# Use fd in fzf for rast dir/path completion
+# Use fd in fzf for fast dir/path completion
 # https://github.com/sharkdp/fd
 _fzf_compgen_path() {
   echo "$1"
