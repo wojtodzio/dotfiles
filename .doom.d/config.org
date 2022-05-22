@@ -56,48 +56,25 @@ To get information about any of these functions/macros, move the cursor over the
 
 You can also try 'gd' (or 'C-c c d') to jump to their definition and see how they are implemented.
 
-#+BEGIN_SRC emacs-lisp
-;; Tabnine AI completion
-;; (use-package! company-tabnine
-;;   :after company
-;;   :ensure t
-;;   :config
-;;   ;; (add-to-list 'company-backends 'company-tabnine)
-;;   (cl-pushnew 'company-tabnine (default-value 'company-backends))
-
-;;   ;; (setq company-tabnine--disable-next-transform nil)
-;;   ;; (defun my-company--transform-candidates (func &rest args)
-;;   ;;   (if (not company-tabnine--disable-next-transform)
-;;   ;;       (apply func args)
-;;   ;;     (setq company-tabnine--disable-next-transform nil)
-;;   ;;     (car args)))
-
-;;   ;; (defun my-company-tabnine (func &rest args)
-;;   ;;   (when (eq (car args) 'candidates)
-;;   ;;     (setq company-tabnine--disable-next-transform t))
-;;   ;;   (apply func args))
-
-;;   ;; (advice-add #'company--transform-candidates :around #'my-company--transform-candidates)
-;;   ;; (advice-add #'company-tabnine :around #'my-company-tabnine)
-;;   ;; Trigger completion fast.
-;;   (setq company-idle-delay 0.1)
-
-;;   ;; Number the candidates (use M-1, M-2 etc to select completions).
-;;   (setq company-show-numbers t)
-;;   )
-  #+END_SRC
 * Dictionaries
 Use SCOWL custom dictionary (http://app.aspell.net/create)
 #+BEGIN_SRC emacs-lisp
-(setq ispell-dictionary "en-custom")
+(setq ispell-dictionary "en")
 #+END_SRC
 * Web mode default indentions
 #+BEGIN_SRC emacs-lisp
 (setq web-mode-markup-indent-offset 2)
 (setq web-mode-code-indent-offset 2)
 (setq web-mode-script-padding 2)
+(setq web-mode-css-indent-offset 2)
+(setq css-indent-offset 2)
 #+END_SRC
 * Projects path
 #+BEGIN_SRC emacs-lisp
 (setq projectile-project-search-path '("~/projects/"))
+#+END_SRC
+* lsp-tailwindcss
+#+BEGIN_SRC emacs-lisp
+(use-package! lsp-tailwindcss)
+(add-to-list 'lsp-language-id-configuration '(".*\\.erb$" . "html"))
 #+END_SRC
