@@ -50,3 +50,5 @@
 ;(unpin! t)
 
 ; (package! company-tabnine)
+
+(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
