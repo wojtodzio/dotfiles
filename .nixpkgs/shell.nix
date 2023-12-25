@@ -22,6 +22,18 @@ in {
           )
         '';
         initExtra = ''
+          # Setup fzf-tab
+          ## disable sort when completing `git checkout`
+          zstyle ':completion:*:git-checkout:*' sort false
+          ## set descriptions format to enable group support
+          zstyle ':completion:*:descriptions' format '[%d]'
+          ## set list-colors to enable filename colorizing
+          zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
+          ## preview directory's content with exa when completing cd
+          zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+          ## switch group using `,` and `.`
+          zstyle ':fzf-tab:*' switch-group ',' '.'
+
           # Explain alias or function
           '$'() {
             if [[ $(type -a "$@") =~ 'function' ]]; then
@@ -77,10 +89,24 @@ in {
             }
             setTabTitleFromContext
           fi
+
+          # Network
+          wifi_password() {
+            local ssid="$1"
+
+            security find-generic-password -D "AirPort network password" -a "$ssid" -gw
+          }
+
+          wifi_join() {
+            local ssid="$1"
+            local password="$2"
+
+            networksetup -setairportnetwork en0 "$ssid" "$password"
+          }
         '';
         enable = true;
         enableAutosuggestions = true;
-        enableSyntaxHighlighting = true;
+        syntaxHighlighting.enable = true;
         enableCompletion = false;
         defaultKeymap = "emacs";
         oh-my-zsh = {
@@ -98,14 +124,14 @@ in {
         };
         plugins = [
           {
+            name = "fzf-tab";
+            file = "fzf-tab.plugin.zsh";
+            src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+          }
+          {
             name = "zsh-nix-shell";
             file = "nix-shell.plugin.zsh";
-            src = pkgs.fetchFromGitHub {
-              owner = "chisui";
-              repo = "zsh-nix-shell";
-              rev = "v0.4.0";
-              sha256 = "037wz9fqmx0ngcwl9az55fgkipb745rymznxnssr3rx9irb6apzg";
-            };
+            src = "${pkgs.zsh-nix-shell}/share/zsh-nix-shell";
           }
           {
             name = "alias-tips";
@@ -123,6 +149,14 @@ in {
           gcwip = "OVERCOMMIT_DISABLE=1 git commit --no-verify --no-gpg-sign -m 'WIP'";
           grbma = "grbm --autostash";
           grbia = "grbi --autostash";
+          external_ip = "dig +short myip.opendns.com @resolver1.opendns.com";
+          internal_ip = "ipconfig getifaddr en0";
+          ping8 = "ping 8.8.8.8";
+          current_wifi_ssid = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | sed -e 's/^  *SSID: //p' -e d";
+          wifi_history = "defaults read /Library/Preferences/SystemConfiguration/com.apple.airport.preferences | grep LastConnected -A 7";
+          wifi_scan = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s";
+          explain = "gh copilot explain";
+          suggest = "gh copilot suggest";
         };
         shellGlobalAliases = {
           R = "| rg";
@@ -138,6 +172,8 @@ in {
         enable = true;
         enableZshIntegration = true;
       };
+
+      lesspipe.enable = true;
 
       fzf = {
         enable = true;
@@ -156,12 +192,17 @@ in {
         nix-direnv.enable = true;
       };
 
-      exa = {
+      eza = {
         enable = true;
         enableAliases = true;
       };
 
       gpg.enable = true;
+
+      atuin = {
+        enable = true;
+        enableZshIntegration = true;
+      };
     };
 
     home = {
@@ -176,10 +217,10 @@ in {
         gh
         wget
         jq
-        bundix
         heroku
-        pry
-        rubyPackages_3_0.solargraph
+        comma # run nix commands with ,
+        dogdns
+        awscli2
       ];
     };
   };

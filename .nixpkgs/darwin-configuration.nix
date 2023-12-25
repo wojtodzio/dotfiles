@@ -5,14 +5,20 @@ let
 in {
   # environment.pathsToLink = [ "/etc/profile.d" "/share/zsh" "/info" "/share/info" "/share/man" "/etc/bash_completion.d" "/share/bash-completion/completions" "/bin" "/share/locale" ];
   imports =
-    [ ./mac-config.nix ./shell.nix ./emacs.nix ./modules/overlays.nix <home-manager/nix-darwin> ];
+    [ ./mac-config.nix ./shell.nix ./emacs.nix <home-manager/nix-darwin> ];
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   nix = {
-    trustedUsers = [ "wojtek" ];
+    settings = {
+      trusted-users = [ "wojtek" ];
+      substituters = [ "https://nix-community.cachix.org/" ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
 
     extraOptions = ''
       keep-derivations = true
@@ -24,10 +30,6 @@ in {
       automatic = true;
       options = "--delete-older-than 30d";
     };
-    binaryCaches = [ "https://nix-community.cachix.org/" ];
-    binaryCachePublicKeys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
   };
 
   home-manager = {
@@ -48,6 +50,8 @@ in {
 
   home-manager.users.wojtek = {
     programs = {
+      ssh.enable = true;
+
       git = {
         enable = true;
         package = pkgs.gitAndTools.gitFull;
@@ -77,6 +81,9 @@ in {
           init.defaultBranch = "main";
           github.user = "wojtodzio";
           rebase.autosquash = true;
+          core = {
+            editor = "code --wait";
+          };
         };
         # https://github.com/wfxr/forgit/issues/121
         iniContent.core.pager = lib.mkForce ''
@@ -89,6 +96,28 @@ in {
               ${pkgs.delta}/bin/delta;
             fi
           }
+        '';
+      };
+
+      neovim = {
+        enable = true;
+        vimAlias = true;
+        extraConfig = ''
+          " Use system clipboard
+          set clipboard+=unnamedplus
+
+          " Copy with CMD-c
+          vnoremap <D-c> "+y
+          nnoremap <D-c> V"+y
+
+          " Transform vim selection to VSCode for the Copilot Chat
+          vnoremap <D-i> <Cmd>call VSCodeNotify('interactiveEditor.start', 1)<CR>
+
+          " Transform vim selection to VSCode for the commenting lines
+          vnoremap <D-/> <Cmd>call VSCodeNotify('editor.action.commentLine', 1)<CR>
+
+          " Use VSCode's formatter
+          vnoremap <=-=> <Cmd>call VSCodeNotify('editor.action.commentLine', 1)<CR>
         '';
       };
     };
@@ -113,10 +142,12 @@ in {
 
       packages = with pkgs; [
         nixfmt
-        coreutils
+        coreutils-prefixed
         gopass
         gopass-jsonapi
       ];
+
+      stateVersion = "23.11";
     };
   };
 
@@ -143,44 +174,78 @@ in {
   services.redis.enable = true;
 
   homebrew = {
+    onActivation = {
+      cleanup = "zap";
+      autoUpdate = false;
+    };
+
     enable = true;
-    autoUpdate = false;
-    cleanup = "zap";
     brewPrefix = "/opt/homebrew/bin";
     casks = [
       "iterm2"
-      "google-chrome"
+      "mimestream" # email
       "slack"
       "discord"
-      "mimestream"
-      "toggl-track"
-      "rectangle"
-      "postico"
-      "postgres-unofficial"
-      "docker"
+      "rectangle" # window management
+      "orbstack" # docker
       "visual-studio-code"
+      "visual-studio-code-insiders"
       "postman"
       "grammarly"
       "spotify"
       "raycast"
       "bettertouchtool"
       "fantastical"
-      "coconutbattery"
-      "iina"
-      "binance"
+      "coconutbattery" # battery status with time estimation
+      "battery" # preserve battery life by not charging over 80%
+      "iina" # media player
+      "binance" # crypto
       "airtable"
       "zoom"
+      "nordvpn"
+      "figma"
+      "dash" # offline documentation
+      "monitorcontrol"
+      "utm" # virtual machines
+      "kindle"
+      "daisydisk" # super fast disk usage visualizer and space cleaner
+      "textsniper" # copy text from screen
+      "adobe-creative-cloud" # photoshop
+      "garmin-express" # Garmin watch
+      "tailscale"
+
+      # db
+      "postico"
+      "postgres-unofficial"
+      "redisinsight"
+
+      # browsers
+      "google-chrome"
+      "arc"
+      "orion" # WebKit (Safari) with Chrome extensions
+      "firefox"
+
+      # gaming
+      "gog-galaxy"
+      "epic-games"
+      "steam"
+      "heroic" # GOG, Amazon and Epic Games Launcher in one place
     ];
 
-    brews = [ "phrase" ];
-
     masApps = {
-      Irvue = 1039633667;
-      Messenger = 1480068668;
+      Irvue = 1039633667; # random wallpapers from Unsplash
+      Messenger = 1480068668; # Facebook Messenger
       Xcode = 497799835;
-      # "TV Time" = 431065232;
+      Prime = 545519333; # Prime Video
+      "Hyper Duck" = 6444667067; # Share links from ios to mac when airdrop doesn't work
+
+      # IOS apps, not supported by mas yet:
+      # Pocket = 309601447; # Read it later
+      # "TV Time" = 431065232; # Track TV shows
     };
 
-    taps = [ "homebrew/cask" "phrase/brewed" ];
+    taps = [
+      "homebrew/cask-versions"
+    ];
   };
 }

@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "pinentry-touchid";
-  version = "1d7fbe6f06b48c6a0c253b894a6f770e2689aa14";
-  vendorSha256 = "sha256-FN4F6ZWgSczmAMlEuigLGHivsXjvDJQVBZe6IrJTLrI=";
+  version = "v0.0.3";
+  vendorHash = "sha256-PJJoTnA9WXzH9Yv/oZfwyjjcbvJwpXxX81vpzTtXWxU";
 
   src = fetchFromGitHub {
     owner = "jorgelbg";
     repo = "pinentry-touchid";
     rev = version;
-    sha256 = "sha256-ccGROm9lgD6LO/pdXzd3XkHQh3qpEvRE/ZvxxPAnWm0=";
+    sha256 = "sha256-XMcJjVVAp5drLMVTShITl0v6uVazrG1/23dVerrsoj4";
   };
 
   buildInputs = with darwin.apple_sdk.frameworks; [ CoreFoundation Foundation LocalAuthentication ];
