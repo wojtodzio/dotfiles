@@ -1,1 +1,1 @@
-alias yaegi='rlwrap yaegi'
+# alias yaegi='rlwrap yaegi'
