@@ -72,29 +72,6 @@ def hr
   '-' * (`stty size`.split(' ').last.to_i)
 end
 
-def procrastinate(page = 1, with_comments: true)
-  require 'net/http'
-  require 'nokogiri'
-
-  uri      = URI.parse("https://anonimowe.pl/#{page}")
-  page     = Net::HTTP.get(uri)
-  parsed   = Nokogiri::HTML.parse(page)
-  articles = parsed.xpath('//article')
-
-  text = articles.map do |article|
-    id       = article.xpath('header/h3/a').text
-    section  = article.xpath('section').text
-    comments = article.xpath('div/div/section/section/p').map(&:text).join
-
-    ["id: #{id}", section, ("Comments: #{comments}" if with_comments)].join("\n")
-  end
-
-  pager      = Pry::Pager.new(Pry.new(Pry.config))
-  final_text = text.join("\n#{hr}\n")
-
-  pager.page(final_text)
-end
-
 # debug yielded parameters easily
 # enumerable.any?(&f(2))
 # ==

@@ -1,6 +1,4 @@
 {
-  imports = [ ./modules/security/pam.nix ];
-
   # Sudo with Touch ID
   security.pam.enableSudoTouchIdAuth = true;
 
