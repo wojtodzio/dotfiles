@@ -150,9 +150,6 @@ in {
         ".gnupg/gpg-agent.conf".text = "pinentry-program ${pinentry-touchid}/bin/pinentry-touchid";
         ".pryrc".source = ~/dotfiles/.pryrc;
         ".psqlrc".source = ~/dotfiles/.psqlrc;
-        ".doom.d/config.org".source = ~/dotfiles/.doom.d/config.org;
-        ".doom.d/packages.el".source = ~/dotfiles/.doom.d/packages.el;
-        ".doom.d".source = ~/dotfiles/.doom.d;
       };
 
       packages = with pkgs; [

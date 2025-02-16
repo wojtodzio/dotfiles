@@ -91,6 +91,7 @@ in {
   environment.systemPackages = with pkgs; [ gnupg ];
   # Needed for emacs-lsp-booster
   environment.variables.LSP_USE_PLISTS = "true";
+  environment.variables.DOOMDIR = "~/dotfiles/.doom.d";
 
   services.emacs = {
     enable = true;
