@@ -50,18 +50,28 @@ in {
 
   home-manager.users.wojtek = {
     programs = {
-      ssh.enable = true;
+      ssh = {
+        enable = true;
+        forwardAgent = true;
+        extraConfig = ''
+          IdentityAgent /Users/wojtek/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+        '';
+      };
 
       git = {
         enable = true;
         package = pkgs.gitAndTools.gitFull;
-        delta = {
+        # delta = {
+        #   enable = true;
+        #   options = {
+        #     diff-so-fancy = true;
+        #     line-numbers = true;
+        #     navigate = true;
+        #   };
+        # };
+        difftastic = {
           enable = true;
-          options = {
-            diff-so-fancy = true;
-            line-numbers = true;
-            navigate = true;
-          };
+          background = "dark";
         };
         userName = "Wojtek Wrona";
         userEmail = "wojtodzio@gmail.com";
@@ -82,7 +92,7 @@ in {
           github.user = "wojtodzio";
           rebase.autosquash = true;
           core = {
-            editor = "code --wait";
+            editor = "emacsclient -nw -r";
           };
         };
         # https://github.com/wfxr/forgit/issues/121
@@ -138,16 +148,22 @@ in {
     home = {
       file = {
         ".gnupg/gpg-agent.conf".text = "pinentry-program ${pinentry-touchid}/bin/pinentry-touchid";
+        ".pryrc".source = ~/dotfiles/.pryrc;
+        ".psqlrc".source = ~/dotfiles/.psqlrc;
+        ".doom.d/config.org".source = ~/dotfiles/.doom.d/config.org;
+        ".doom.d/packages.el".source = ~/dotfiles/.doom.d/packages.el;
+        ".doom.d".source = ~/dotfiles/.doom.d;
       };
 
       packages = with pkgs; [
-        nixfmt
+        nixfmt-rfc-style
         coreutils-prefixed
         gopass
         gopass-jsonapi
+        jdk21
       ];
 
-      stateVersion = "23.11";
+      stateVersion = "24.05";
     };
   };
 
@@ -183,41 +199,53 @@ in {
     brewPrefix = "/opt/homebrew/bin";
     casks = [
       "iterm2"
-      "mimestream" # email
+      "itermai" # iTerm2 AI Plugin
+      "ghostty"
+      "orbstack" # containers
+      "utm" # virtual machines
       "slack"
       "discord"
       "rectangle" # window management
-      "orbstack" # docker
-      "visual-studio-code"
-      "visual-studio-code-insiders"
       "postman"
-      "grammarly"
       "spotify"
-      "raycast"
+      "raycast" # better spotlight
       "bettertouchtool"
       "fantastical"
       "coconutbattery" # battery status with time estimation
       "battery" # preserve battery life by not charging over 80%
       "iina" # media player
       "binance" # crypto
-      "airtable"
       "zoom"
-      "nordvpn"
       "figma"
       "dash" # offline documentation
-      "monitorcontrol"
-      "utm" # virtual machines
+      "monitorcontrol" # control your external display's brightness
       "kindle"
       "daisydisk" # super fast disk usage visualizer and space cleaner
       "textsniper" # copy text from screen
-      "adobe-creative-cloud" # photoshop
       "garmin-express" # Garmin watch
+      "nordvpn"
       "tailscale"
+      "balenaetcher" # flash OS images to SD cards & USB drives
+      "qbittorrent" # Linux downloader
+      "stremio" # Open source media center
+      "shottr" # Screenshot tool
+      "jordanbaird-ice" # Menu bar manager
+      "secretive" # Store SSH keys in the Secure Enclave
+
+      # LLM
+      "chatgpt"
+      "claude"
+
+      # code
+      "visual-studio-code"
+      "zed"
 
       # db
       "postico"
       "postgres-unofficial"
       "redisinsight"
+      "sqlitestudio"
+      "db-browser-for-sqlite"
 
       # browsers
       "google-chrome"
@@ -230,6 +258,8 @@ in {
       "epic-games"
       "steam"
       "heroic" # GOG, Amazon and Epic Games Launcher in one place
+      "crossover"
+      "moonlight"
     ];
 
     masApps = {
@@ -238,6 +268,8 @@ in {
       Xcode = 497799835;
       Prime = 545519333; # Prime Video
       "Hyper Duck" = 6444667067; # Share links from ios to mac when airdrop doesn't work
+      Dropover = 1355679052;
+      # "Folder Hub" = 6473019059; # https://www.finderhub.app/
 
       # IOS apps, not supported by mas yet:
       # Pocket = 309601447; # Read it later
@@ -246,6 +278,7 @@ in {
 
     taps = [
       "homebrew/cask-versions"
+      "macos-fuse-t/homebrew-cask" # FUSE for macOS that uses NFS v4 local server instead of a kernel extension
     ];
   };
 }

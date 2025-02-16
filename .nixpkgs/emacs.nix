@@ -1,7 +1,8 @@
 { pkgs, config, ... }:
 
-{
-
+let
+  unstable = import <unstable> {};
+in {
   home-manager.users.wojtek = {
     home = {
       sessionPath = [
@@ -12,7 +13,8 @@
     programs = {
       emacs = {
         enable = true;
-        package = pkgs.emacs29-macport;
+        # package = pkgs.emacs29-macport;
+        package = unstable.emacs30;
         extraPackages = epkgs: [
           epkgs.vterm
         ];
@@ -32,11 +34,11 @@
       nodejs_18
 
       # Nix
-      rnix-lsp
       nil
 
       # vterm
       cmake
+      glibtool
 
       # Terraform
       terraform
@@ -80,22 +82,23 @@
       # Ruby
       pry
       bundix
-      ruby-lsp
-      rubyPackages.solargraph
-      rubyPackages.syntax_tree
-      rubyPackages.sorbet-runtime
+
+      # lsp
+      emacs-lsp-booster
     ];
   };
 
   environment.systemPackages = with pkgs; [ gnupg ];
+  # Needed for emacs-lsp-booster
+  environment.variables.LSP_USE_PLISTS = "true";
 
   services.emacs = {
     enable = true;
-    package = pkgs.emacs29-macport;
+    # package = pkgs.emacs29-macport;
+    package = unstable.emacs30;
   };
 
-  fonts.fontDir.enable = true;
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     nerdfonts
     emacs-all-the-icons-fonts
   ];

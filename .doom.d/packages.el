@@ -51,4 +51,16 @@
 
 ; (package! company-tabnine)
 
-(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+(package! lsp-tailwindcss
+  :recipe (:host github
+           :repo "merrickluo/lsp-tailwindcss"))
+(package! rails-routes :pin "eab995a9297ca5bd9bd4f4c2737f2fecfc36def0")
+(package! rails-i18n :pin "8e87e4e48e31902b8259ded28a208c2e7efea6e9")
+(package! multi-line :pin "625c608443f98bb34b4d5600d52c198509fb64d0")
+(package! ruby-refactor :pin "e6b7125878a08518bffec6942df0c606f748e9ee")
+(package! string-inflection :pin "fd7926ac17293e9124b31f706a4e8f38f6a9b855")
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+(package! exec-path-from-shell)
+;; (package! aider :recipe (:host github :repo "tninja/aider.el" :files ("aider.el" "aider-doom.el")))
+(package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))

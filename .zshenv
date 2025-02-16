@@ -1,34 +1,3 @@
-# PATH
-export PATH="/usr/local/bin:$HOME/bin:$HOME/.local/bin:$HOME/.emacs.d/bin:$PATH"
-
-# Language environment
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-# Use vim as default editor
-export VISUAL=nvim
-export EDITOR="$VISUAL"
-
-# Use libc++ (llvm) from brew
-## /usr/local/opt/llvm = brew --prefix llvm
-## I'm using a hardcoded value here to speed up shell start
-export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
-export CPPFLAGS="-I/usr/local/opt/llvm/include"
-export CFLAGS="-I/usr/local/opt/llvm/include"
-
-# Add OpenSSL PKG_CONFIG path (required by Crystal's Lucky framework)
-export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-
-# GPG
-export GPG_TTY=$(tty)
-
-# Setup lesspipe for better less for binary files
-export LESSOPEN="|/usr/local/bin/lesspipe.sh %s" LESS_ADVANCED_PREPROCESSOR=1
-
-# Homebrew
-## I'm using hardcoded value to speed up shell start
-export HOMEBREW_PREFIX="/usr/local"
-
 # FZF
 ## Show certain number of lines in preview window
 export FZF_PREVIEW_LINES=1000
@@ -58,9 +27,6 @@ export DEBUGGER='while IFS="\n" read -erp "[$(basename ${BASH_SOURCE[0]}):$LINEN
                    eval "$command_to_execute";
                  done;
                  echo'
-
-# Enable history in iex
-export ERL_AFLAGS="-kernel shell_history enabled"
 
 source ~/.secrets
 

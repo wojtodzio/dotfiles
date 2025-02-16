@@ -7,6 +7,13 @@ let
     rev = "f916547cf911629813b8a4c88183dcfd0fde4c3f";
     sha256 = "sha256-Y0qERTHwilyjYxPLZDCSRWSX6Id7MjPgDiQGh0i24Xg=";
   };
+  unstable = import <unstable> {};
+  yazi-plugins = pkgs.fetchFromGitHub {
+    owner = "yazi-rs";
+    repo = "plugins";
+    rev = "600614a9dc59a12a63721738498c5541c7923873";
+    sha256 = "sha256-mQkivPt9tOXom78jgvSwveF/8SD8M2XCXxGY8oijl+o=";
+  };
 in {
   home-manager.users.wojtek = {
     programs = {
@@ -33,6 +40,8 @@ in {
           zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
           ## switch group using `,` and `.`
           zstyle ':fzf-tab:*' switch-group ',' '.'
+          ## Fix slow pasting wiht zsh-syntax-highlighting
+          zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 
           # Explain alias or function
           '$'() {
@@ -46,11 +55,11 @@ in {
           # Integrate fd with fzf
           # https://github.com/sharkdp/fd#using-fd-with-fzf
           _fzf_compgen_path() {
-            fd --hidden --follow --exclude ".git" . "$1"
+            ${pkgs.fd}/bin/fd --hidden --follow --exclude ".git" . "$1"
           }
 
           _fzf_compgen_dir() {
-            fd --type d --hidden --follow --exclude ".git" . "$1"
+            ${pkgs.fd}/bin/fd --type d --hidden --follow --exclude ".git" . "$1"
           }
 
           # Iterm itegration
@@ -103,9 +112,42 @@ in {
 
             networksetup -setairportnetwork en0 "$ssid" "$password"
           }
+
+          # Ruby
+          rspec() {
+            if [ -e "bin/rspec" ]; then
+              bin/rspec $@
+            elif type bundle &> /dev/null && [ -e "Gemfile" ]; then
+              bundle exec rspec $@
+            else
+              command rspec $@
+            fi
+          }
+
+          # Utilities
+          weather() {
+            local city="''${1:-'Bielsko'}"
+            ${pkgs.curl}/bin/curl -4 http://wttr.in/"$city"
+          }
+
+          # Figlet fuzzy font selector with preview => copy to clipboard
+          fgl() (
+            [ $# -eq 0 ] && return
+            cd ${pkgs.figlet}/share/figlet
+            local font=$(ls *.flf | sort | ${pkgs.fzf}/bin/fzf --no-multi --reverse --preview "${pkgs.figlet}/bin/figlet -f {} $@") &&
+            ${pkgs.figlet}/bin/figlet -f "$font" "$@" | pbcopy
+          )
+
+          csv() {
+            column -s, -t "$1" | less -#2 -N -S
+          }
+
+          if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+            source "$GHOSTTY_RESOURCES_DIR"/shell-integration/zsh/ghostty-integration
+          fi
         '';
         enable = true;
-        enableAutosuggestions = true;
+        autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
         enableCompletion = false;
         defaultKeymap = "emacs";
@@ -149,17 +191,23 @@ in {
           gcwip = "OVERCOMMIT_DISABLE=1 git commit --no-verify --no-gpg-sign -m 'WIP'";
           grbma = "grbm --autostash";
           grbia = "grbi --autostash";
-          external_ip = "dig +short myip.opendns.com @resolver1.opendns.com";
+          external_ip = "${pkgs.dig}/bin/dig +short myip.opendns.com @resolver1.opendns.com";
           internal_ip = "ipconfig getifaddr en0";
           ping8 = "ping 8.8.8.8";
           current_wifi_ssid = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | sed -e 's/^  *SSID: //p' -e d";
           wifi_history = "defaults read /Library/Preferences/SystemConfiguration/com.apple.airport.preferences | grep LastConnected -A 7";
           wifi_scan = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s";
-          explain = "gh copilot explain";
-          suggest = "gh copilot suggest";
+          explain = "${pkgs.gh}/bin/gh copilot explain";
+          suggest = "${pkgs.gh}/bin/gh copilot suggest";
+          "cd.." = "cd ..";
+          battery_percentage = ''pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f1 -d";" '';
+          battery_time = ''pmset -g batt | egrep "([0-9]+\%).*" -o --colour=auto | cut -f3 -d";"'';
+          current_finder_path = ''osascript -e "tell app \"Finder\" to POSIX path of (insertion location as alias)"'';
         };
         shellGlobalAliases = {
-          R = "| rg";
+          J = "| jq .";
+          DS = "DISABLE_SPRING=true";
+          C = "| pbcopy";
         };
       };
 
@@ -173,7 +221,167 @@ in {
         enableZshIntegration = true;
       };
 
-      lesspipe.enable = true;
+      lesspipe.enable = true; # display more with less
+
+      zoxide.enable = true; # z - jump to directories
+
+      # terminal file manager
+      yazi = {
+        enable = true;
+        enableZshIntegration = true;
+        shellWrapperName = "y";
+        package = unstable.yazi;
+
+        plugins = {
+          chmod = "${yazi-plugins}/chmod.yazi";
+          max-preview = "${yazi-plugins}/max-preview.yazi";
+          smart-enter = "${yazi-plugins}/smart-enter.yazi";
+          git = "${yazi-plugins}/git.yazi";
+          smart-filter = "${yazi-plugins}/smart-filter.yazi";
+          mime-ext = "${yazi-plugins}/mime-ext.yazi";
+
+          starship = pkgs.fetchFromGitHub {
+            owner = "Rolv-Apneseth";
+            repo = "starship.yazi";
+            rev = "9c37d37099455a44343f4b491d56debf97435a0e";
+            sha256 = "sha256-wESy7lFWan/jTYgtKGQ3lfK69SnDZ+kDx4K1NfY4xf4=";
+          };
+          ouch = pkgs.fetchFromGitHub {
+            owner = "ndtoan96";
+            repo = "ouch.yazi";
+            rev = "b8698865a0b1c7c1b65b91bcadf18441498768e6";
+            sha256 = "sha256-eRjdcBJY5RHbbggnMHkcIXUF8Sj2nhD/o7+K3vD3hHY=";
+          };
+          what-size = pkgs.fetchFromGitHub {
+            owner = "pirafrank";
+            repo = "what-size.yazi";
+            rev = "b23e3a4cf44ce12b81fa6be640524acbd40ad9d3";
+            sha256 = "sha256-SDObD22u2XYF2BYKsdw9ZM+yJLH9xYTwSFRWIwMCi08=";
+          };
+          open-with-cmd = pkgs.fetchFromGitHub {
+            owner = "Ape";
+            repo = "open-with-cmd.yazi";
+            rev = "a80d1cf41fc23f84fbdf0b8b26c5b13f06455472";
+            sha256 = "sha256-IAJSZhO6WEIjSXlUvmcX3rgpQKu358vfe5dEm7JtmPg=";
+          };
+        };
+
+        initLua = ''
+          require("git"):setup()
+          require("starship"):setup()
+        '';
+
+        settings = {
+          plugin.prepend_fetchers = [
+            {
+              id = "git";
+              name = "*";
+              run = "git";
+            }
+            {
+              id = "git";
+              name = "*/";
+              run = "git";
+            }
+            {
+              id = "mime";
+              "if" = "!(mime|dummy)";
+              name = "*";
+              run = "mime-ext";
+              prio = "high";
+            }
+          ];
+
+          preview.image_delay = 0;
+        };
+
+        keymap = {
+          manager.prepend_keymap = [
+            {
+              on = ["c" "m"];
+              run = "plugin chmod";
+              desc = "Chmod on selected files";
+            }
+            {
+              on = "T";
+              run = "plugin max-preview";
+              desc = "Maximize or restore the preview pane";
+            }
+            {
+              on = "l";
+              run = "plugin smart-enter";
+              desc = "Enter the child directory, or open the file";
+            }
+            {
+              on = "F";
+              run = "plugin smart-filter";
+              desc = "Smart filter";
+            }
+            {
+              on = ["c" "z"];
+              run = "plugin ouch --args=zip";
+              desc = "Compress with ouch";
+            }
+            {
+              on = ["c" "s"];
+              run = "plugin what-size";
+              desc = "Calc size of selection or cwd";
+            }
+            {
+              on = "o";
+              run = "plugin open-with-cmd --args=block";
+              desc = "Open with command in the terminal";
+            }
+            {
+              on = "O";
+              run = "plugin open-with-cmd";
+              desc = "Open with command";
+            }
+            {
+              on = ["g" "r"];
+              run = "shell 'ya emit cd \"$(git rev-parse --show-toplevel)\"'";
+              desc = "Go to git root";
+            }
+            {
+              on = "<C-p>";
+              run = "shell 'qlmanage -p \"$@\"'";
+              desc = "Quick look";
+            }
+          ];
+
+          plugin.prepend_previewers = [
+            {
+              mime = "application/*zip";
+              run = "ouch";
+            }
+            {
+              mime = "application/x-tar";
+              run = "ouch";
+            }
+            {
+              mime = "application/x-bzip2";
+              run = "ouch";
+            }
+            {
+              mime = "application/x-7z-compressed";
+              run = "ouch";
+            }
+            {
+              mime = "application/x-rar";
+              run = "ouch";
+            }
+            {
+              mime = "application/x-xz";
+              run = "ouch";
+            }
+            {
+              on = "<Esc>";
+              run = "close";
+              desc = "Cancel input";
+            }
+          ];
+        };
+      };
 
       fzf = {
         enable = true;
@@ -192,16 +400,21 @@ in {
         nix-direnv.enable = true;
       };
 
-      eza = {
-        enable = true;
-        enableAliases = true;
-      };
+      eza.enable = true;
 
       gpg.enable = true;
 
       atuin = {
         enable = true;
         enableZshIntegration = true;
+        settings = {
+          auto_sync = true;
+          filter_mode = "global";
+          filter_mode_shell_up_key_binding = "session";
+          show_preview = true;
+          secrets_filter = true;
+          enter_accept = false;
+        };
       };
     };
 
@@ -216,11 +429,34 @@ in {
         gitAndTools.gitFull
         gh
         wget
-        jq
         heroku
-        comma # run nix commands with ,
         dogdns
         awscli2
+        unixtools.watch
+        speedtest-cli
+        cloudflared
+        p7zip
+        visidata # vd https://www.visidata.org/
+        timg # terminal image and video viewer.
+        ouch # compression and decompression in the terminal
+        jq
+        jless # json viewer
+        hyperfine # benchmarking tool
+        sd # sed alternative
+        jc # json parser
+        btop # top alternative
+        gping # graphical ping
+        mtr # ping and traceroute
+        rustscan # modern nmap
+
+        # nix
+        nixd # lsp
+        unstable.devenv
+        comma # run nix commands with ,
+        cachix
+
+        # AI
+        unstable.aider-chat
       ];
     };
   };
@@ -231,7 +467,7 @@ in {
     enableBashCompletion = true;
   };
 
-  environment.loginShell = "${pkgs.zsh}/bin/zsh -l";
+  # environment.loginShell = "${pkgs.zsh}/bin/zsh -l";
   environment.variables.SHELL = "${pkgs.zsh}/bin/zsh";
   environment.variables.EDITOR = "emacsclient -t";
   environment.variables.VISUAL = "emacsclient -c";
