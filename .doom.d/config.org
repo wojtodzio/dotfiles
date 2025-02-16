@@ -73,8 +73,170 @@ Use SCOWL custom dictionary (http://app.aspell.net/create)
 #+BEGIN_SRC emacs-lisp
 (setq projectile-project-search-path '("~/projects/"))
 #+END_SRC
-* lsp-tailwindcss
+* Nerd font
+https://github.com/doomemacs/doomemacs/issues/7431#issuecomment-1722663411
 #+BEGIN_SRC emacs-lisp
-(use-package! lsp-tailwindcss)
-(add-to-list 'lsp-language-id-configuration '(".*\\.erb$" . "html"))
+(setq nerd-icons-font-names '("SymbolsNerdFontMono-Regular.ttf"))
+#+END_SRC
+* Copilot
+Accept completion from copilot and fallback to company
+#+BEGIN_SRC emacs-lisp
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+#+END_SRC
+* The pager is generally just annoying in emacs
+#+BEGIN_SRC emacs-lisp
+(setenv "PAGER" "cat")
+#+END_SRC
+* Nobody uses prettier-ruby
+#+BEGIN_SRC emacs-lisp
+(setq-hook! 'ruby-mode-hook +format-with 'rubocop)
+#+END_SRC
+* LSP
+** use ruby-lsp instead of Solargraph
+#+BEGIN_SRC emacs-lisp
+(setq lsp-disabled-clients '(semgrep-ls rubocop-ls ruby-ls))
+(after! lsp-mode
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection "ruby-lsp")
+                    :major-modes '(ruby-mode)
+                    :multi-root t
+                    :priority 100
+                    :server-id 'ruby-lsp-ls)))
+#+END_SRC
+** lsp-tailwindcss
+#+BEGIN_SRC emacs-lisp
+(use-package! lsp-tailwindcss
+  :init
+  (setq lsp-tailwindcss-add-on-mode t))
+;; use web mode for erb files
+(add-to-list 'lsp-language-id-configuration '(".*\\.html\\.erb$" . "html"))
+#+END_SRC
+** emacs-lsp-booster: Faster LSP. [[https://www.reddit.com/r/emacs/comments/1c0v28k/lspmode_vs_lspbridge_vs_lspce_vs_eglot/][Comparison]]. Will probably be obsolete in Emacs 30.
+#+BEGIN_SRC emacs-lisp
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+#+END_SRC
+** Do not watch changes to some directories
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'lsp-mode
+  (dolist (dir '("[/\\\\]\\.devenv\\'"
+                 "[/\\\\]\\.zed\\'"
+                 "[/\\\\]\\.husky\\'"
+                 "[/\\\\]tmp\\'"
+                 "[/\\\\]log\\'"
+                 "[/\\\\]\\.log\\'"))
+    (add-to-list 'lsp-file-watch-ignored-directories dir)))
+#+END_SRC
+** Fix path in compile and shell with Emacs provided by Nix on macOS (https://github.com/purcell/envrc/issues/92)
+#+BEGIN_SRC emacs-lisp
+(require 'exec-path-from-shell)
+(when (display-graphic-p)
+  (dolist (var '("SSH_AUTH_SOCK"
+                 "SSH_AGENT_PID"
+                 "XDG_DATA_DIRS"
+                 "XDG_CONFIG_DIRS"
+                 "__NIX_DARWIN_SET_ENVIRONMENT_DONE"
+                 "__HM_SESS_VARS_SOURCED"
+                 "NIX_USER_PROFILE_DIR"
+                 "NIX_SSL_CERT_FILE"
+                 "NIX_PROFILES"
+                 "NIX_PATH"))
+    (add-to-list 'exec-path-from-shell-variables var))
+  (exec-path-from-shell-initialize))
+#+END_SRC
+** Customize theme
+#+BEGIN_SRC emacs-lisp
+;; ;; (setq doom-one-brighter-modeline nil)
+;; (custom-theme-set-faces! 'doom-one
+;;   ;; Basic background and foreground
+;;   `(default :background "#181818" :foreground "#EEEEEE")
+
+;;   ;; Cursor color
+;;   '(cursor :background "#FFA07A")
+
+;;   ;; Selection
+;;   ;; '(region :background "#EEEEEE" :foreground "#181818")
+
+;;   ;; Org Mode Background
+;;   ;; '(org-document :background "#181818")
+;;   ;; '(org-block :background "#181818")
+;;   ;; '(org-indent :background "#181818")
+
+;;   ;; bg-alt
+;;   `(doom-variable 'doom-themes-color-palette-bg-alt "#222222")
+
+;;   ;; Palette - More Differentiated Mapping (Revised)
+;;   `(doom-variable 'doom-themes-color-palette-base0 "#222222")
+;;   `(doom-variable 'doom-themes-color-palette-base1 "#181818")
+;;   `(doom-variable 'doom-themes-color-palette-base2 "#222222")
+;;   `(doom-variable 'doom-themes-color-palette-base3 "#444444")
+;;   `(doom-variable 'doom-themes-color-palette-base4 "#666666")
+;;   `(doom-variable 'doom-themes-color-palette-base5 "#777777")
+;;   `(doom-variable 'doom-themes-color-palette-base6 "#999999")
+;;   `(doom-variable 'doom-themes-color-palette-base7 "#DDDDDD")
+;;   `(doom-variable 'doom-themes-color-palette-base8 "#FFFFFF")
+
+;;   `(doom-variable 'doom-themes-color-palette-red "#FF5555")
+;;   `(doom-variable 'doom-themes-color-palette-orange "#DDAA00")
+;;   `(doom-variable 'doom-themes-color-palette-green "#44BF44")
+;;   `(doom-variable 'doom-themes-color-palette-teal "#22CCEF")
+;;   `(doom-variable 'doom-themes-color-palette-yellow "#FFFF33")
+;;   `(doom-variable 'doom-themes-color-palette-blue "#3399FF")
+;;   `(doom-variable 'doom-themes-color-palette-dark-blue "#3399FF")
+;;   `(doom-variable 'doom-themes-color-palette-magenta "#EB55EF")
+;;   `(doom-variable 'doom-themes-color-palette-violet "#EEAAEE")
+;;   `(doom-variable 'doom-themes-color-palette-cyan "#22CCEF")
+;;   `(doom-variable 'doom-themes-color-palette-dark-cyan "#66FFFF")
+
+;;   ;; Override specific faces for better distinction (Revised)
+;;   '(font-lock-keyword-face :foreground "#3399FF") ; Ghostty Blue (Original doom-one color)
+;;   '(font-lock-function-name-face :foreground "#EB55EF") ; Ghostty Magenta (Slightly more vivid than original)
+;;   '(font-lock-constant-face :foreground "#DDAA00") ; Ghostty Orange/Yellow (More distinct than original violet)
+;;   '(font-lock-comment-face :foreground "#777777")
+;;   )
+#+END_SRC
+** Aider
+#+BEGIN_SRC emacs-lisp
+(use-package aidermacs
+  :config
+
+  (setq aidermacs-use-architect-mode t)
+  (setq aidermacs-architect-model "openai/o1-preview")
+  (setq aidermacs-editor-model "openai/01-mini")
+  (setq aidermacs-backend 'vterm)
+  ;; (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
+  ;; (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)
+  (setq aidermacs-use-architect-mode t))
 #+END_SRC

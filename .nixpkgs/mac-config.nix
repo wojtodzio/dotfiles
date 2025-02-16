@@ -22,14 +22,20 @@
       # Text, disable auto-correct
       NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
 
-      # Display full path in finder
-      finder._FXShowPosixPathInTitle = true;
+      # Do not display full path in finder
+      finder._FXShowPosixPathInTitle = false;
+
+      CustomUserPreferences = {
+        "org.gnu.Emacs" = {
+          "AppleFontSmoothing" = 0;
+        };
+      };
 
       # firewall
       alf.globalstate = 1;
       SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
       loginwindow.LoginwindowText =
-        "Property of Wojciech Wrona. If found, please contact wojtodzio@gmail.com";
+        "Property of Wojciech Wrona. If found, please contact wojtodzio@gmail.com or +48608035461";
     };
   };
 }
