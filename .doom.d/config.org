@@ -31,10 +31,18 @@ There are two ways to load a theme. Both assume the theme is installed and avail
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-one)
 #+END_SRC
-* Org
-If you use `org' and don't want your org files in the default location below, change `org-directory'. It must be set before org loads!
+* Paths
+** Projects
+#+BEGIN_SRC emacs-lisp
+(setq projectile-project-search-path '("~/projects/"))
+#+END_SRC
+** Org
 #+BEGIN_SRC emacs-lisp
 (setq org-directory "~/org/")
+#+END_SRC
+** Doom
+#+BEGIN_SRC emacs-lisp
+(setq doom-user-dir "~/dotfiles/.doom.d")
 #+END_SRC
 * Line numbers
 This determines the style of line numbers in effect. If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
@@ -68,10 +76,6 @@ Use SCOWL custom dictionary (http://app.aspell.net/create)
 (setq web-mode-script-padding 2)
 (setq web-mode-css-indent-offset 2)
 (setq css-indent-offset 2)
-#+END_SRC
-* Projects path
-#+BEGIN_SRC emacs-lisp
-(setq projectile-project-search-path '("~/projects/"))
 #+END_SRC
 * Nerd font
 https://github.com/doomemacs/doomemacs/issues/7431#issuecomment-1722663411
@@ -159,7 +163,7 @@ Accept completion from copilot and fallback to company
                  "[/\\\\]\\.log\\'"))
     (add-to-list 'lsp-file-watch-ignored-directories dir)))
 #+END_SRC
-** Fix path in compile and shell with Emacs provided by Nix on macOS (https://github.com/purcell/envrc/issues/92)
+* Fix path in compile and shell with Emacs provided by Nix on macOS (https://github.com/purcell/envrc/issues/92)
 #+BEGIN_SRC emacs-lisp
 (require 'exec-path-from-shell)
 (when (display-graphic-p)
@@ -176,58 +180,7 @@ Accept completion from copilot and fallback to company
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 #+END_SRC
-** Customize theme
-#+BEGIN_SRC emacs-lisp
-;; ;; (setq doom-one-brighter-modeline nil)
-;; (custom-theme-set-faces! 'doom-one
-;;   ;; Basic background and foreground
-;;   `(default :background "#181818" :foreground "#EEEEEE")
-
-;;   ;; Cursor color
-;;   '(cursor :background "#FFA07A")
-
-;;   ;; Selection
-;;   ;; '(region :background "#EEEEEE" :foreground "#181818")
-
-;;   ;; Org Mode Background
-;;   ;; '(org-document :background "#181818")
-;;   ;; '(org-block :background "#181818")
-;;   ;; '(org-indent :background "#181818")
-
-;;   ;; bg-alt
-;;   `(doom-variable 'doom-themes-color-palette-bg-alt "#222222")
-
-;;   ;; Palette - More Differentiated Mapping (Revised)
-;;   `(doom-variable 'doom-themes-color-palette-base0 "#222222")
-;;   `(doom-variable 'doom-themes-color-palette-base1 "#181818")
-;;   `(doom-variable 'doom-themes-color-palette-base2 "#222222")
-;;   `(doom-variable 'doom-themes-color-palette-base3 "#444444")
-;;   `(doom-variable 'doom-themes-color-palette-base4 "#666666")
-;;   `(doom-variable 'doom-themes-color-palette-base5 "#777777")
-;;   `(doom-variable 'doom-themes-color-palette-base6 "#999999")
-;;   `(doom-variable 'doom-themes-color-palette-base7 "#DDDDDD")
-;;   `(doom-variable 'doom-themes-color-palette-base8 "#FFFFFF")
-
-;;   `(doom-variable 'doom-themes-color-palette-red "#FF5555")
-;;   `(doom-variable 'doom-themes-color-palette-orange "#DDAA00")
-;;   `(doom-variable 'doom-themes-color-palette-green "#44BF44")
-;;   `(doom-variable 'doom-themes-color-palette-teal "#22CCEF")
-;;   `(doom-variable 'doom-themes-color-palette-yellow "#FFFF33")
-;;   `(doom-variable 'doom-themes-color-palette-blue "#3399FF")
-;;   `(doom-variable 'doom-themes-color-palette-dark-blue "#3399FF")
-;;   `(doom-variable 'doom-themes-color-palette-magenta "#EB55EF")
-;;   `(doom-variable 'doom-themes-color-palette-violet "#EEAAEE")
-;;   `(doom-variable 'doom-themes-color-palette-cyan "#22CCEF")
-;;   `(doom-variable 'doom-themes-color-palette-dark-cyan "#66FFFF")
-
-;;   ;; Override specific faces for better distinction (Revised)
-;;   '(font-lock-keyword-face :foreground "#3399FF") ; Ghostty Blue (Original doom-one color)
-;;   '(font-lock-function-name-face :foreground "#EB55EF") ; Ghostty Magenta (Slightly more vivid than original)
-;;   '(font-lock-constant-face :foreground "#DDAA00") ; Ghostty Orange/Yellow (More distinct than original violet)
-;;   '(font-lock-comment-face :foreground "#777777")
-;;   )
-#+END_SRC
-** Aider
+* Aider
 #+BEGIN_SRC emacs-lisp
 (use-package aidermacs
   :config
