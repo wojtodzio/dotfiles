@@ -19,16 +19,7 @@ in {
     programs = {
       home-manager.enable = true;
       zsh = {
-        # https://github.com/nix-community/home-manager/issues/2562
-        initExtraFirst = let currentSystem = "/run/current-system/sw/share/zsh"; in ''
-          fpath=(
-            ${currentSystem}/site-functions
-            ${currentSystem}/$ZSH_VERSION/functions
-            ${currentSystem}/vendor-completions
-            $fpath
-          )
-        '';
-        initExtra = ''
+        initContent = ''
           # Setup fzf-tab
           ## disable sort when completing `git checkout`
           zstyle ':completion:*:git-checkout:*' sort false

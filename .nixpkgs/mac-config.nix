@@ -1,8 +1,10 @@
 {
   # Sudo with Touch ID
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   system = {
+    primaryUser = "wojtek";
+
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToControl = true;

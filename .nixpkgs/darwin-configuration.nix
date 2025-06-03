@@ -8,7 +8,6 @@ in {
     [ ./mac-config.nix ./shell.nix ./emacs.nix <home-manager/nix-darwin> ];
 
   # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   nix = {

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, darwin }:
+{ buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pinentry-touchid";
@@ -11,8 +11,6 @@ buildGoModule rec {
     rev = version;
     sha256 = "sha256-XMcJjVVAp5drLMVTShITl0v6uVazrG1/23dVerrsoj4";
   };
-
-  buildInputs = with darwin.apple_sdk.frameworks; [ CoreFoundation Foundation LocalAuthentication ];
 
   subPackages = [ "." "go-assuan" "sensor" ];
   doCheck = false;

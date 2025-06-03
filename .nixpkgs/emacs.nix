@@ -31,7 +31,7 @@ in {
       semgrep # static analysis for many languages
       editorconfig-core-c
       fontconfig
-      nodejs_18
+      nodejs_24
 
       # Nix
       nil
@@ -91,7 +91,7 @@ in {
   environment.systemPackages = with pkgs; [ gnupg ];
   # Needed for emacs-lsp-booster
   environment.variables.LSP_USE_PLISTS = "true";
-  environment.variables.DOOMDIR = "~/dotfiles/.doom.d";
+  # environment.variables.DOOMDIR = "~/dotfiles/.doom.d";
 
   services.emacs = {
     enable = true;
@@ -100,7 +100,7 @@ in {
   };
 
   fonts.packages = with pkgs; [
-    nerdfonts
+    nerd-fonts.symbols-only
     emacs-all-the-icons-fonts
   ];
 }
