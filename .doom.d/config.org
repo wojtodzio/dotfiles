@@ -44,6 +44,11 @@ There are two ways to load a theme. Both assume the theme is installed and avail
 #+BEGIN_SRC emacs-lisp
 (setq doom-user-dir "~/dotfiles/.doom.d")
 #+END_SRC
+* Projectile
+Disable cache so new files are immediately visible
+#+BEGIN_SRC emacs-lisp
+(setq projectile-enable-caching nil)
+#+END_SRC
 * Line numbers
 This determines the style of line numbers in effect. If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
 #+BEGIN_SRC emacs-lisp
@@ -176,7 +181,10 @@ Accept completion from copilot and fallback to company
                  "NIX_USER_PROFILE_DIR"
                  "NIX_SSL_CERT_FILE"
                  "NIX_PROFILES"
-                 "NIX_PATH"))
+                 "NIX_PATH"
+                 "GPG_AGENT_INFO"
+                 "LANG"
+                 "LC_CTYPE"))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 #+END_SRC
@@ -186,10 +194,17 @@ Accept completion from copilot and fallback to company
   :config
 
   (setq aidermacs-use-architect-mode t)
-  (setq aidermacs-architect-model "openai/o1-preview")
-  (setq aidermacs-editor-model "openai/01-mini")
+  (setq aidermacs-architect-model "openrouter/openai/o3-high")
+  (setq aidermacs-editor-model "openai/o1-mini")
   (setq aidermacs-backend 'vterm)
   ;; (setenv "ANTHROPIC_API_KEY" anthropic-api-key)
   ;; (global-set-key (kbd "C-c a") 'aidermacs-transient-menu)
   (setq aidermacs-use-architect-mode t))
+#+END_SRC
+* Fix Corfu completions in terminal for until Emacs 31 is out and stable
+#+BEGIN_SRC emacs-lisp
+(use-package! corfu-terminal
+  :if (not (display-graphic-p))
+  :config
+  (corfu-terminal-mode +1))
 #+END_SRC

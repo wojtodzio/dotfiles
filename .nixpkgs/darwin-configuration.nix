@@ -228,12 +228,14 @@ in {
       "shottr" # Screenshot tool
       "jordanbaird-ice" # Menu bar manager
       "secretive" # Store SSH keys in the Secure Enclave
+      "obsidian"
 
       # LLM
       "chatgpt"
       "claude"
 
       # code
+      # "emacs-app"
       "visual-studio-code"
       "zed"
 
@@ -249,6 +251,7 @@ in {
       "arc"
       "orion" # WebKit (Safari) with Chrome extensions
       "firefox"
+      "zen-browser" # Arc in Firefox
 
       # gaming
       "gog-galaxy"
@@ -265,7 +268,6 @@ in {
       Xcode = 497799835;
       Prime = 545519333; # Prime Video
       "Hyper Duck" = 6444667067; # Share links from ios to mac when airdrop doesn't work
-      Dropover = 1355679052;
       # "Folder Hub" = 6473019059; # https://www.finderhub.app/
 
       # IOS apps, not supported by mas yet:
@@ -276,6 +278,7 @@ in {
     taps = [
       "homebrew/cask-versions"
       "macos-fuse-t/homebrew-cask" # FUSE for macOS that uses NFS v4 local server instead of a kernel extension
+      # "jimeh/emacs-builds"
     ];
   };
 }

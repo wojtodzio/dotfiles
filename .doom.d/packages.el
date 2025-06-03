@@ -64,3 +64,6 @@
 (package! exec-path-from-shell)
 ;; (package! aider :recipe (:host github :repo "tninja/aider.el" :files ("aider.el" "aider-doom.el")))
 (package! aidermacs :recipe (:host github :repo "MatthewZMD/aidermacs" :files ("*.el")))
+;; Fix corfu in terminal till Emacs 31
+(package! corfu-terminal
+  :recipe (:host codeberg :repo "akib/emacs-corfu-terminal"))
