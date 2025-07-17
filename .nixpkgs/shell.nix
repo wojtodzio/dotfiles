@@ -412,6 +412,7 @@ in {
     home = {
       sessionPath = [
         "${iterm2_shell_integration}/utilities"
+	"$HOME/.bun/bin"
       ];
       packages = with pkgs; [
         vim
@@ -439,15 +440,13 @@ in {
         gping # graphical ping
         mtr # ping and traceroute
         rustscan # modern nmap
+	unstable.bun
 
         # nix
         nixd # lsp
         unstable.devenv
         comma # run nix commands with ,
         cachix
-
-        # AI
-        unstable.aider-chat
       ];
     };
   };
