@@ -7,14 +7,15 @@ let
     rev = "f916547cf911629813b8a4c88183dcfd0fde4c3f";
     sha256 = "sha256-Y0qERTHwilyjYxPLZDCSRWSX6Id7MjPgDiQGh0i24Xg=";
   };
-  unstable = import <unstable> {};
+  unstable = import <unstable> { };
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
     rev = "600614a9dc59a12a63721738498c5541c7923873";
     sha256 = "sha256-mQkivPt9tOXom78jgvSwveF/8SD8M2XCXxGY8oijl+o=";
   };
-in {
+in
+{
   home-manager.users.wojtek = {
     programs = {
       home-manager.enable = true;
@@ -289,7 +290,10 @@ in {
         keymap = {
           manager.prepend_keymap = [
             {
-              on = ["c" "m"];
+              on = [
+                "c"
+                "m"
+              ];
               run = "plugin chmod";
               desc = "Chmod on selected files";
             }
@@ -309,12 +313,18 @@ in {
               desc = "Smart filter";
             }
             {
-              on = ["c" "z"];
+              on = [
+                "c"
+                "z"
+              ];
               run = "plugin ouch --args=zip";
               desc = "Compress with ouch";
             }
             {
-              on = ["c" "s"];
+              on = [
+                "c"
+                "s"
+              ];
               run = "plugin what-size";
               desc = "Calc size of selection or cwd";
             }
@@ -329,7 +339,10 @@ in {
               desc = "Open with command";
             }
             {
-              on = ["g" "r"];
+              on = [
+                "g"
+                "r"
+              ];
               run = "shell 'ya emit cd \"$(git rev-parse --show-toplevel)\"'";
               desc = "Go to git root";
             }
@@ -413,13 +426,13 @@ in {
     home = {
       sessionPath = [
         "${iterm2_shell_integration}/utilities"
-	"$HOME/.bun/bin"
+        "$HOME/.bun/bin"
       ];
       packages = with pkgs; [
         vim
         (ripgrep.override { withPCRE2 = true; })
         fd
-        gitAndTools.gitFull
+        gitFull
         gh
         wget
         heroku
@@ -442,7 +455,7 @@ in {
         mtr # ping and traceroute
         rustscan # modern nmap
         unstable.bun
-        blender
+        # blender # broken on macOS in 25.11
 
         # nix
         nixd # lsp

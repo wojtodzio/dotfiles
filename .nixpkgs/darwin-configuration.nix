@@ -1,11 +1,21 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
-  pinentry-touchid = pkgs.callPackage ./pkgs/pinentry-touchid.nix {};
-in {
+  pinentry-touchid = pkgs.callPackage ./pkgs/pinentry-touchid.nix { };
+in
+{
   # environment.pathsToLink = [ "/etc/profile.d" "/share/zsh" "/info" "/share/info" "/share/man" "/etc/bash_completion.d" "/share/bash-completion/completions" "/bin" "/share/locale" ];
-  imports =
-    [ ./mac-config.nix ./shell.nix ./emacs.nix <home-manager/nix-darwin> ];
+  imports = [
+    ./mac-config.nix
+    ./shell.nix
+    ./emacs.nix
+    <home-manager/nix-darwin>
+  ];
 
   # Auto upgrade nix package and the daemon service.
   nixpkgs.config.allowUnfree = true;
@@ -44,22 +54,30 @@ in {
   };
 
   # Set shell to the current zsh, as /run/current-system may be not available yet when terminal windows are restored
-  system.activationScripts.postActivation.text =
-    "chsh -s ${pkgs.zsh}/bin/zsh wojtek";
+  system.activationScripts.postActivation.text = "chsh -s ${pkgs.zsh}/bin/zsh wojtek";
 
   home-manager.users.wojtek = {
     programs = {
       ssh = {
         enable = true;
-        forwardAgent = true;
-        extraConfig = ''
-          IdentityAgent /Users/wojtek/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
-        '';
+        enableDefaultConfig = false;
+        matchBlocks."*" = {
+          forwardAgent = true;
+          extraOptions = {
+            IdentityAgent = "/Users/wojtek/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
+          };
+        };
+      };
+
+      difftastic = {
+        enable = true;
+        git.enable = true;
+        options.background = "dark";
       };
 
       git = {
         enable = true;
-        package = pkgs.gitAndTools.gitFull;
+        package = pkgs.gitFull;
         # delta = {
         #   enable = true;
         #   options = {
@@ -68,18 +86,18 @@ in {
         #     navigate = true;
         #   };
         # };
-        difftastic = {
-          enable = true;
-          background = "dark";
-        };
-        userName = "Wojtek Wrona";
-        userEmail = "wojtodzio@gmail.com";
         signing = {
           key = "70354561AC152EDA";
           signByDefault = true;
         };
-        ignores = [ "*~" ".DS_Store" ".tab-title" ];
-        extraConfig = {
+        ignores = [
+          "*~"
+          ".DS_Store"
+          ".tab-title"
+        ];
+        settings = {
+          user.name = "Wojtek Wrona";
+          user.email = "wojtodzio@gmail.com";
           color.ui = "auto";
           credential."https://github.com".helper = "!gh auth git-credential";
           http.sslVerify = true;

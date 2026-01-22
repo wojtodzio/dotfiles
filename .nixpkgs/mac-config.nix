@@ -2,6 +2,9 @@
   # Sudo with Touch ID
   security.pam.services.sudo_local.touchIdAuth = true;
 
+  # Firewall
+  networking.applicationFirewall.enable = true;
+
   system = {
     primaryUser = "wojtek";
 
@@ -33,11 +36,8 @@
         };
       };
 
-      # firewall
-      alf.globalstate = 1;
       SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
-      loginwindow.LoginwindowText =
-        "Property of Wojciech Wrona. If found, please contact wojtodzio@gmail.com or +48608035461";
+      loginwindow.LoginwindowText = "Property of Wojciech Wrona. If found, please contact wojtodzio@gmail.com or +48608035461";
     };
   };
 }
