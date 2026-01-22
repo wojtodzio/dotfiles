@@ -22,7 +22,7 @@ in {
     };
 
     home.packages = with pkgs; [
-      (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
+      # (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
       (ripgrep.override { withPCRE2 = true; })
       coreutils-prefixed
       fd
@@ -77,7 +77,7 @@ in {
 
       # Markdown
       pandoc
-      python311Packages.grip
+      python313Packages.grip
 
       # Ruby
       pry

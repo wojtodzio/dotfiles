@@ -182,7 +182,7 @@ in {
 
   environment.shells = [ "${pkgs.zsh}/bin/zsh" ];
 
-  services.lorri.enable = true;
+  # services.lorri.enable = true;
   services.redis.enable = true;
 
   homebrew = {
@@ -208,7 +208,6 @@ in {
       "bettertouchtool"
       "fantastical"
       "coconutbattery" # battery status with time estimation
-      "battery" # preserve battery life by not charging over 80%
       "iina" # media player
       "binance" # crypto
       "zoom"
@@ -220,7 +219,7 @@ in {
       "textsniper" # copy text from screen
       "garmin-express" # Garmin watch
       "nordvpn"
-      "tailscale"
+      "tailscale-app"
       "balenaetcher" # flash OS images to SD cards & USB drives
       "qbittorrent" # Linux downloader
       "stremio" # Open source media center
@@ -232,25 +231,30 @@ in {
       # LLM
       "chatgpt"
       "claude"
+      "claude-code"
 
       # code
       # "emacs-app"
       "visual-studio-code"
       "zed"
+      "cursor"
+
+      # tex
+      "texstudio"
+      "mactex"
 
       # db
       "postico"
       "postgres-unofficial"
-      "redisinsight"
-      "sqlitestudio"
-      "db-browser-for-sqlite"
+      "redis-insight"
+      "base"
 
       # browsers
       "google-chrome"
       "arc"
       "orion" # WebKit (Safari) with Chrome extensions
       "firefox"
-      "zen-browser" # Arc in Firefox
+      "zen" # Arc in Firefox
 
       # gaming
       "gog-galaxy"
@@ -263,7 +267,6 @@ in {
 
     masApps = {
       Irvue = 1039633667; # random wallpapers from Unsplash
-      Messenger = 1480068668; # Facebook Messenger
       Xcode = 497799835;
       Prime = 545519333; # Prime Video
       "Hyper Duck" = 6444667067; # Share links from ios to mac when airdrop doesn't work
@@ -275,7 +278,6 @@ in {
     };
 
     taps = [
-      "homebrew/cask-versions"
       "macos-fuse-t/homebrew-cask" # FUSE for macOS that uses NFS v4 local server instead of a kernel extension
       # "jimeh/emacs-builds"
     ];
