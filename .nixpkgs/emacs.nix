@@ -1,8 +1,10 @@
 { pkgs, config, ... }:
 
 let
-  unstable = import <unstable> {};
-in {
+  # unstable is provided via overlay in flake.nix
+  unstable = pkgs.unstable;
+in
+{
   home-manager.users.wojtek = {
     home = {
       sessionPath = [

@@ -7,7 +7,8 @@ let
     rev = "f916547cf911629813b8a4c88183dcfd0fde4c3f";
     sha256 = "sha256-Y0qERTHwilyjYxPLZDCSRWSX6Id7MjPgDiQGh0i24Xg=";
   };
-  unstable = import <unstable> { };
+  # unstable is provided via overlay in flake.nix
+  unstable = pkgs.unstable;
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";

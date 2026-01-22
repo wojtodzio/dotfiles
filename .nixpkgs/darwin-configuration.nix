@@ -14,7 +14,6 @@ in
     ./mac-config.nix
     ./shell.nix
     ./emacs.nix
-    <home-manager/nix-darwin>
   ];
 
   # Auto upgrade nix package and the daemon service.
@@ -242,7 +241,7 @@ in
       "qbittorrent" # Linux downloader
       "stremio" # Open source media center
       "shottr" # Screenshot tool
-      "jordanbaird-ice" # Menu bar manager
+      # "jordanbaird-ice" # Menu bar manager
       "secretive" # Store SSH keys in the Secure Enclave
       "obsidian"
 
@@ -288,6 +287,7 @@ in
       Xcode = 497799835;
       Prime = 545519333; # Prime Video
       "Hyper Duck" = 6444667067; # Share links from ios to mac when airdrop doesn't work
+      Barbee = 1548711022; # Bartender alternative since Ice currenlty doesn't work on Tahoe
       # "Folder Hub" = 6473019059; # https://www.finderhub.app/
 
       # IOS apps, not supported by mas yet:
