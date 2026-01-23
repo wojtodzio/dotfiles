@@ -16,27 +16,28 @@ in
     ./emacs.nix
   ];
 
-  # Auto upgrade nix package and the daemon service.
   nixpkgs.config.allowUnfree = true;
 
-  nix = {
-    settings = {
-      trusted-users = [ "wojtek" ];
-      substituters = [ "https://nix-community.cachix.org/" ];
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  nix.enable = false;
+  determinateNix = {
+    customSettings = {
+      eval-cores = 0;
+      extra-substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org/"
+        "https://helix.cachix.org"
+        "https://devenv.cachix.org"
+        "https://nixpkgs-ruby.cachix.org"
+        "https://nixpkgs-python.cachix.org"
       ];
-    };
-
-    extraOptions = ''
-      keep-derivations = true
-      keep-outputs = true
-      experimental-features = nix-command flakes
-    '';
-    package = pkgs.nix;
-    gc = {
-      automatic = true;
-      options = "--delete-older-than 30d";
+      extra-trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "helix.cachix.org-1:ejp9KQpR1FBI2onstMQ34yogDm4OgU2ru6lIwPvuCVs="
+        "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+        "nixpkgs-ruby.cachix.org-1:vrcdi50fTolOxWCZZkw0jakOnUI1T19oYJ+PRYdK4SM="
+        "nixpkgs-python.cachix.org-1:hxjI7pFxTyuTHn2NkvWCrAUcNZLNS3ZAvfYNuYifcEU="
+      ];
     };
   };
 

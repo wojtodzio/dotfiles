@@ -7,7 +7,6 @@ let
     rev = "f916547cf911629813b8a4c88183dcfd0fde4c3f";
     sha256 = "sha256-Y0qERTHwilyjYxPLZDCSRWSX6Id7MjPgDiQGh0i24Xg=";
   };
-  # unstable is provided via overlay in flake.nix
   unstable = pkgs.unstable;
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
@@ -473,11 +472,14 @@ in
     enableBashCompletion = true;
   };
 
-  # environment.loginShell = "${pkgs.zsh}/bin/zsh -l";
   environment.variables.SHELL = "${pkgs.zsh}/bin/zsh";
   environment.variables.EDITOR = "emacsclient -t";
   environment.variables.VISUAL = "emacsclient -c";
   environment.extraInit = ''
     [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ] && [ -n "''${SSH_CONNECTION:-}" ] && [ "''${SHLVL:-0}" -eq 1 ]; then
+      . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+    fi
   '';
 }

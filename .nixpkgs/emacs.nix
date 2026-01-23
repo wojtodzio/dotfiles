@@ -1,7 +1,6 @@
 { pkgs, config, ... }:
 
 let
-  # unstable is provided via overlay in flake.nix
   unstable = pkgs.unstable;
 in
 {
