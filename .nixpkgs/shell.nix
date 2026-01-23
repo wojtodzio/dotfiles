@@ -424,6 +424,15 @@ in
     };
 
     home = {
+      sessionVariables = {
+        # Usage in scripts: eval $DEBUGGER
+        DEBUGGER = ''
+          while IFS="\n" read -erp "[$(basename ''${BASH_SOURCE[0]}):$LINENO]> " command_to_execute; do
+                                 eval "$command_to_execute";
+                               done;
+                               echo'';
+      };
+
       sessionPath = [
         "${iterm2_shell_integration}/utilities"
         "$HOME/.bun/bin"
