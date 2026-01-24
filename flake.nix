@@ -22,6 +22,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-secrets = {
       url = "git+https://github.com/wojtodzio/nix-secrets.git";
       flake = false;
@@ -37,6 +42,7 @@
       home-manager,
       determinate,
       agenix,
+      nix-index-database,
       nix-secrets,
       ...
     }:
@@ -62,6 +68,7 @@
           { nixpkgs.overlays = overlays; }
           home-manager.darwinModules.home-manager
           agenix.darwinModules.default
+          nix-index-database.darwinModules.nix-index
           ./hosts/macbook/default.nix
           { nix.registry.nixpkgs.flake = nixpkgs; }
         ];
@@ -78,6 +85,7 @@
           { nixpkgs.overlays = overlays; }
           home-manager.nixosModules.home-manager
           agenix.nixosModules.default
+          nix-index-database.nixosModules.nix-index
           ./hosts/posejdon/default.nix
           { nix.registry.nixpkgs.flake = nixpkgs; }
         ];
