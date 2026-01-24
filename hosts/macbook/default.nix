@@ -5,15 +5,12 @@
   ...
 }:
 
-let
-  pinentry-touchid = pkgs.callPackage ./pkgs/pinentry-touchid.nix { };
-in
 {
   # environment.pathsToLink = [ "/etc/profile.d" "/share/zsh" "/info" "/share/info" "/share/man" "/etc/bash_completion.d" "/share/bash-completion/completions" "/bin" "/share/locale" ];
   imports = [
-    ./mac-config.nix
-    ./shell.nix
-    ./emacs.nix
+    ./system.nix
+    ../../modules/shared/shell.nix
+    ../../modules/darwin/emacs.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -165,9 +162,9 @@ in
 
     home = {
       file = {
-        ".gnupg/gpg-agent.conf".text = "pinentry-program ${pinentry-touchid}/bin/pinentry-touchid";
-        ".pryrc".source = ./.pryrc;
-        ".psqlrc".source = ./.psqlrc;
+        ".gnupg/gpg-agent.conf".text = "pinentry-program ${pkgs.pinentry-touchid}/bin/pinentry-touchid";
+        ".pryrc".source = ../../.pryrc;
+        ".psqlrc".source = ../../.psqlrc;
       };
 
       packages = with pkgs; [
