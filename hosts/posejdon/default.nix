@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  nixSecrets,
   ...
 }:
 
@@ -16,14 +17,44 @@
   time.timeZone = "Europe/Warsaw";
   i18n.defaultLocale = "en_US.UTF-8";
 
+  # agenix secrets configuration
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.secrets = {
+    wifi-password = {
+      file = "${nixSecrets}/wifi-password.age";
+      mode = "400";
+      owner = "root";
+    };
+    posejdon-ssh-key = {
+      file = "${nixSecrets}/posejdon-ssh-key.age";
+      mode = "400";
+      owner = "root";
+    };
+  };
+
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.wojtek = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
   };
-  environment.etc."ssh/authorized_keys.d/wojtek".text = ''
-    ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCiLso/yPkylc0dHDhRe38kbUof5ud91BMHiWuTmzXSTfihMYjsdUoBh/d4uOp7DRl6gU+FEQoVnAnfZFQTiJ4A= Posejdon-sudo@secretive.Wojciech's-MacBook-Pro.local
-  '';
+
+  # Inject SSH authorized key from agenix secret at boot
+  systemd.services.inject-ssh-authorized-keys = {
+    description = "Inject SSH authorized keys from agenix secret";
+    wantedBy = [ "multi-user.target" ];
+    before = [ "sshd.service" ];
+    after = [ "agenix.service" ];
+    script = ''
+      mkdir -p /home/wojtek/.ssh
+      cat ${config.age.secrets.posejdon-ssh-key.path} > /home/wojtek/.ssh/authorized_keys
+      chmod 600 /home/wojtek/.ssh/authorized_keys
+      chown wojtek:users /home/wojtek/.ssh/authorized_keys
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     vim

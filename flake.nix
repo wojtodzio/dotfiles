@@ -21,6 +21,11 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-secrets = {
+      url = "git+https://github.com/wojtodzio/nix-secrets.git";
+      flake = false;
+    };
   };
 
   outputs =
@@ -32,6 +37,7 @@
       home-manager,
       determinate,
       agenix,
+      nix-secrets,
       ...
     }:
     let
@@ -76,6 +82,7 @@
         ];
         specialArgs = {
           inherit (nixpkgs) lib;
+          nixSecrets = nix-secrets;
         };
       };
 

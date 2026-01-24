@@ -7,7 +7,6 @@
 
 let
   SSID = "SUPER_DOMEK_5G";
-  SSIDpassword = "Maslo1130.";
   wirelessInterface = "wlp4s0";
 in
 {
@@ -15,7 +14,8 @@ in
     hostName = "posejdon";
     wireless = {
       enable = true;
-      networks."${SSID}".psk = SSIDpassword;
+      secretsFile = config.age.secrets.wifi-password.path;
+      networks."${SSID}".pskRaw = "ext:psk_wifi";
       interfaces = [ wirelessInterface ];
     };
 
