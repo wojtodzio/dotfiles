@@ -68,12 +68,12 @@
           { nixpkgs.overlays = overlays; }
           home-manager.darwinModules.home-manager
           agenix.darwinModules.default
-          nix-index-database.darwinModules.nix-index
           ./hosts/macbook/default.nix
           { nix.registry.nixpkgs.flake = nixpkgs; }
         ];
         specialArgs = {
           inherit (nixpkgs) lib;
+          inherit nix-index-database;
         };
       };
 
@@ -85,12 +85,12 @@
           { nixpkgs.overlays = overlays; }
           home-manager.nixosModules.home-manager
           agenix.nixosModules.default
-          nix-index-database.nixosModules.nix-index
           ./hosts/posejdon/default.nix
           { nix.registry.nixpkgs.flake = nixpkgs; }
         ];
         specialArgs = {
           inherit (nixpkgs) lib;
+          inherit nix-index-database;
           nixSecrets = nix-secrets;
         };
       };

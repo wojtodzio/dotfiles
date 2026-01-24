@@ -3,6 +3,7 @@
   lib,
   pkgs,
   nixSecrets,
+  nix-index-database,
   ...
 }:
 
@@ -69,6 +70,7 @@
     useUserPackages = true;
     users.wojtek = {
       imports = [
+        nix-index-database.homeModules.default
         ../../modules/shared/home
         ../../modules/nixos/home.nix
       ];

@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  nix-index-database,
   ...
 }:
 
@@ -54,6 +55,7 @@
 
   home-manager.users.wojtek = {
     imports = [
+      nix-index-database.homeModules.default
       ../../modules/shared/home
       ../../modules/darwin/home.nix
     ];

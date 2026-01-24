@@ -138,6 +138,7 @@ in
     };
   };
 
+  # nix-index with pre-built database from nix-index-database
   programs.nix-index = {
     enable = true;
     enableZshIntegration = true;
