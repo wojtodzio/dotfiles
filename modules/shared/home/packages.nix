@@ -44,6 +44,7 @@ in
       # Development
       unstable.devenv
       direnv
+      python3 # Required by alias-tips zsh plugin
 
       # Nix tools
       nixd
