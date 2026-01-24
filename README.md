@@ -1,72 +1,117 @@
 # Dotfiles
 
-Nix flake-based configuration for macOS using nix-darwin, home-manager, and Determinate Nix.
+Multi-host Nix flake configuration for macOS (nix-darwin) and NixOS, with Determinate Nix and agenix secrets management.
+
+## Hosts
+
+| Host | System | Description |
+|------|--------|-------------|
+| `macbook` | aarch64-darwin | MacBook Pro with nix-darwin + home-manager |
+| `posejdon` | x86_64-linux | NixOS homelab server |
 
 ## Quick Start
 
+### Macbook
+
 ```bash
 # Rebuild system
-sudo darwin-rebuild switch --flake ~/.nixpkgs
+darwin-rebuild switch --flake ~/dotfiles#macbook
 
-# Update dependencies
-cd ~/.nixpkgs
-nix flake update
-sudo darwin-rebuild switch --flake ~/.nixpkgs
+# Or use hostname alias
+darwin-rebuild switch --flake ~/dotfiles#Wojciechs-MacBook-Pro
+```
+
+### Posejdon (local)
+
+```bash
+# SSH into posejdon and rebuild
+ssh wojtek@posejdon
+cd ~/dotfiles
+sudo nixos-rebuild switch --flake .#posejdon
+```
+
+### Posejdon (remote from macbook)
+
+```bash
+# Build and deploy from macbook
+# Note: Requires nix-secrets to be available on posejdon
+rsync -avz --delete --exclude='.git' ~/dotfiles/ wojtek@posejdon:~/dotfiles-deploy/
+ssh -A wojtek@posejdon "cd ~/dotfiles-deploy && sudo nixos-rebuild switch --flake .#posejdon --override-input nix-secrets path:/home/wojtek/nix-secrets"
 ```
 
 ## Structure
 
 ```
-~/.nixpkgs/
-├── flake.nix                # Flake definition
-├── flake.lock               # Locked dependencies  
-├── darwin-configuration.nix # Main system config
-├── mac-config.nix           # macOS system settings
-├── shell.nix                # Shell, packages, environment
-├── emacs.nix                # Emacs configuration
-└── pkgs/                    # Custom packages
+~/dotfiles/
+├── flake.nix              # Multi-host flake definition
+├── flake.lock             # Locked dependencies
+├── hosts/
+│   ├── macbook/           # macOS host config
+│   │   ├── default.nix    # Main darwin config + home-manager
+│   │   └── system.nix     # macOS system settings
+│   └── posejdon/          # NixOS host config
+│       ├── default.nix    # Main NixOS config
+│       ├── hardware.nix   # Hardware & boot settings
+│       ├── networking.nix # Network, WiFi, Tailscale
+│       ├── services.nix   # SSH, ZFS, system services
+│       └── hardware-configuration.nix
+├── modules/
+│   ├── darwin/            # macOS-specific modules
+│   │   ├── emacs.nix
+│   │   └── pkgs/          # Custom darwin packages
+│   ├── nixos/             # NixOS-specific modules (future)
+│   └── shared/            # Shared across hosts
+│       └── shell.nix      # Shell config, packages
+└── overlays/
+    ├── default.nix        # Auto-loader for overlays
+    └── pinentry-touchid.nix
 ```
 
 ## Key Features
 
-- **Determinate Nix**: Uses Determinate's Nix distribution with FlakeHub integration
-- **Flake-based**: No channels, fully reproducible via `flake.lock`
-- **Binary caches**: Configured for nix-community, helix, devenv, nixpkgs-ruby/python
-- **Homebrew integration**: Manages GUI apps via nix-darwin
+- **Multi-host**: Single flake manages macOS and NixOS systems
+- **Determinate Nix**: Uses Determinate's Nix distribution with FlakeHub
+- **Secrets Management**: agenix with private `nix-secrets` repo
+- **Auto-loading Overlays**: Drop `.nix` files in `overlays/` to auto-load
+- **Modular Config**: Split by domain (networking, services, hardware)
 
-## Configuration
+## Secrets
 
-### Nix Settings
+Secrets are managed with [agenix](https://github.com/ryantm/agenix) and stored in a private `nix-secrets` repository.
 
-Managed via `determinateNix.customSettings` in `darwin-configuration.nix`:
-- Written to `/etc/nix/nix.custom.conf`
-- Includes binary caches and performance settings
+- WiFi password (posejdon)
+- SSH authorized keys (posejdon)
 
-### System Customization
-
-- **macOS settings**: `mac-config.nix` (keyboard, dock, finder, etc.)
-- **Packages**: `shell.nix` and `emacs.nix`
-- **Shell**: zsh with starship, fzf, yazi, atuin
+Secrets are encrypted with host SSH keys and decrypted at runtime to `/run/agenix/`.
 
 ## Common Tasks
 
 ```bash
+# Update flake inputs
+cd ~/dotfiles && nix flake update
+
 # Check configuration
 nix flake check
 
-# Build without switching
-nix build ~/.nixpkgs#darwinConfigurations.Wojciechs-MacBook-Pro.system
+# Build without switching (macbook)
+nix build .#darwinConfigurations.macbook.system
+
+# Build without switching (posejdon)
+nix build .#nixosConfigurations.posejdon.config.system.build.toplevel
 
 # Garbage collection
 nix-collect-garbage -d
 
-# List generations
+# List generations (macbook)
 darwin-rebuild --list-generations
+
+# List generations (posejdon)
+ssh wojtek@posejdon "nixos-rebuild list-generations"
 ```
 
 ## Notes
 
-- Configuration name matches hostname: `Wojciechs-MacBook-Pro`
-- Alias `macbook` also available for convenience
-- New files must be staged: `git add <file>` before building
-- The `~/.nixpkgs` directory is symlinked to `~/dotfiles/.nixpkgs`
+- New files must be staged with `git add` before building
+- Posejdon uses Tailscale for SSH access (hostname: `posejdon`)
+- WiFi password on posejdon uses `pskFile` pointing to agenix secret
+- SSH authorized keys on posejdon are in `/etc/ssh/authorized_keys.d/` for pam_rssh compatibility
