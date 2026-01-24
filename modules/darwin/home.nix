@@ -10,8 +10,9 @@
   # SSH with Secretive
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "yes";
+    enableDefaultConfig = false;
     matchBlocks."*" = {
+      forwardAgent = true;
       extraOptions = {
         IdentityAgent = "/Users/wojtek/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
       };
