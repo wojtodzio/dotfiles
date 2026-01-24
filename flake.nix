@@ -76,6 +76,7 @@
         modules = [
           determinate.nixosModules.default
           { nixpkgs.overlays = overlays; }
+          home-manager.nixosModules.home-manager
           agenix.nixosModules.default
           ./hosts/posejdon/default.nix
           { nix.registry.nixpkgs.flake = nixpkgs; }

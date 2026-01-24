@@ -18,7 +18,6 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   # Determinate Nix configuration
-  # Note: On NixOS, determinate module uses nix.settings which gets written to /etc/nix/nix.custom.conf
   nix.settings = {
     cores = 0;
     extra-substituters = [
@@ -57,20 +56,39 @@
     };
   };
 
-  # Define a user account. Don't forget to set a password with 'passwd'.
+  # User account
   users.users.wojtek = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
   };
 
+  # Home-manager configuration
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.wojtek = {
+      imports = [
+        ../../modules/shared/home
+        ../../modules/nixos/home.nix
+      ];
+    };
+  };
+
+  # System packages (minimal - most come from home-manager)
   environment.systemPackages = with pkgs; [
     vim
     wget
     zellij
-    direnv
     git
     git-credential-manager
   ];
+
+  # Enable zsh system-wide
+  programs.zsh.enable = true;
+  environment.variables.SHELL = "${pkgs.zsh}/bin/zsh";
+  environment.variables.EDITOR = "emacsclient -t";
+  environment.variables.VISUAL = "emacsclient -c";
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
@@ -82,7 +100,6 @@
     enable = true;
     enableSSHSupport = true;
   };
-  programs.zsh.enable = true;
   programs.git.enable = true;
 
   nixpkgs.config.allowUnfree = true;
