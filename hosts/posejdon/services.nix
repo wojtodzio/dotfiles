@@ -29,4 +29,8 @@
   # Passwordless sudo when SSH'ing with keys
   security.pam.rssh.enable = true;
   security.pam.services.sudo.rssh = true;
+
+  # SSH authorized keys in /etc for pam_rssh compatibility
+  # pam_rssh looks in /etc/ssh/authorized_keys.d/$user by default
+  environment.etc."ssh/authorized_keys.d/wojtek".source = config.age.secrets.posejdon-ssh-key.path;
 }

@@ -38,24 +38,6 @@
     extraGroups = [ "wheel" ];
   };
 
-  # Inject SSH authorized key from agenix secret at boot
-  systemd.services.inject-ssh-authorized-keys = {
-    description = "Inject SSH authorized keys from agenix secret";
-    wantedBy = [ "multi-user.target" ];
-    before = [ "sshd.service" ];
-    after = [ "agenix.service" ];
-    script = ''
-      mkdir -p /home/wojtek/.ssh
-      cat ${config.age.secrets.posejdon-ssh-key.path} > /home/wojtek/.ssh/authorized_keys
-      chmod 600 /home/wojtek/.ssh/authorized_keys
-      chown wojtek:users /home/wojtek/.ssh/authorized_keys
-    '';
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-  };
-
   environment.systemPackages = with pkgs; [
     vim
     wget
