@@ -12,8 +12,8 @@ let
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "600614a9dc59a12a63721738498c5541c7923873";
-    sha256 = "sha256-mQkivPt9tOXom78jgvSwveF/8SD8M2XCXxGY8oijl+o=";
+    rev = "6c71385af67c71cb3d62359e94077f2e940b15df";
+    sha256 = "sha256-+akz8E6Fmk6KwmeZOePEm/KqfbDaKeL4wiUgtm12SAE=";
   };
 in
 {
@@ -34,8 +34,8 @@ in
       starship = pkgs.fetchFromGitHub {
         owner = "Rolv-Apneseth";
         repo = "starship.yazi";
-        rev = "9c37d37099455a44343f4b491d56debf97435a0e";
-        sha256 = "sha256-wESy7lFWan/jTYgtKGQ3lfK69SnDZ+kDx4K1NfY4xf4=";
+        rev = "eca186171c5f2011ce62712f95f699308251c749";
+        sha256 = "sha256-xcz2+zepICZ3ji0Hm0SSUBSaEpabWUrIdG7JmxUl/ts=";
       };
       ouch = pkgs.fetchFromGitHub {
         owner = "ndtoan96";
