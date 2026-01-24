@@ -41,8 +41,6 @@ in
 
     firewall = {
       enable = true;
-
-      # always allow traffic from Tailscale network
       trustedInterfaces = [ "tailscale0" ];
     };
   };

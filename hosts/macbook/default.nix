@@ -163,8 +163,8 @@
     home = {
       file = {
         ".gnupg/gpg-agent.conf".text = "pinentry-program ${pkgs.pinentry-touchid}/bin/pinentry-touchid";
-        ".pryrc".source = ../../.pryrc;
-        ".psqlrc".source = ../../.psqlrc;
+        ".pryrc".source = ../../modules/shared/dotfiles/.pryrc;
+        ".psqlrc".source = ../../modules/shared/dotfiles/.psqlrc;
       };
 
       packages = with pkgs; [
