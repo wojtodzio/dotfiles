@@ -1,5 +1,5 @@
 # Darwin-specific emacs configuration (service, fonts)
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 
 let
   unstable = pkgs.unstable;

@@ -1,7 +1,5 @@
 # Darwin-specific home-manager configuration
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
