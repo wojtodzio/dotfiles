@@ -69,7 +69,7 @@
       ];
 
       perSystem =
-        { pkgs, system, ... }:
+        { pkgs, ... }:
         {
           # Formatter for `nix fmt`
           formatter = pkgs.nixfmt-rfc-style;
@@ -114,6 +114,7 @@
           apps = {
             check = {
               type = "app";
+              meta.description = "Run nix flake check";
               program = toString (
                 pkgs.writeShellScript "check" ''
                   ${pkgs.nix}/bin/nix flake check
@@ -123,6 +124,7 @@
 
             fmt = {
               type = "app";
+              meta.description = "Format the flake with nix fmt";
               program = toString (
                 pkgs.writeShellScript "fmt" ''
                   ${pkgs.nix}/bin/nix fmt
@@ -132,6 +134,7 @@
 
             update = {
               type = "app";
+              meta.description = "Update flake inputs";
               program = toString (
                 pkgs.writeShellScript "update" ''
                   ${pkgs.nix}/bin/nix flake update
@@ -141,6 +144,7 @@
 
             build-macbook = {
               type = "app";
+              meta.description = "Build the macbook configuration";
               program = toString (
                 pkgs.writeShellScript "build-macbook" ''
                   if [ "$(uname)" != "Darwin" ]; then
@@ -154,6 +158,7 @@
 
             build-posejdon = {
               type = "app";
+              meta.description = "Build the posejdon configuration";
               program = toString (
                 pkgs.writeShellScript "build-posejdon" ''
                   ${pkgs.nix}/bin/nix build .#nixosConfigurations.posejdon.config.system.build.toplevel
@@ -163,6 +168,7 @@
 
             switch-macbook = {
               type = "app";
+              meta.description = "Switch macbook to latest configuration";
               program = toString (
                 pkgs.writeShellScript "switch-macbook" ''
                   if [ "$(uname)" != "Darwin" ]; then
@@ -176,6 +182,7 @@
 
             switch-posejdon = {
               type = "app";
+              meta.description = "Switch posejdon to latest configuration";
               program = toString (
                 pkgs.writeShellScript "switch-posejdon" ''
                   if [ "$(uname)" = "Darwin" ]; then
