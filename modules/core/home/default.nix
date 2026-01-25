@@ -9,15 +9,7 @@
 
 {
   imports = [
-    ./zsh.nix
-    ./git.nix
-    ./programs.nix
-    ./packages.nix
-    ./dotfiles.nix
-    # Optional modules (moved to modules/optional/home/)
-    ../../optional/home/yazi.nix
-    ../../optional/home/neovim.nix
-    ../../optional/home/emacs.nix
+    ./features
   ];
 
   # Common home-manager settings
