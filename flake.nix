@@ -56,16 +56,7 @@
     }:
     let
       # Overlays for both systems
-      overlays = [
-        # Unstable packages overlay
-        (final: _prev: {
-          unstable = import nixpkgs-unstable {
-            system = final.system;
-            config.allowUnfree = true;
-          };
-        })
-      ]
-      ++ (import ./overlays);
+      overlays = import ./overlays;
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
@@ -74,8 +65,9 @@
       ];
 
       perSystem =
-        { pkgs, ... }:
+        { pkgs, system, ... }:
         {
+          _module.args.pkgsUnstable = nixpkgs-unstable.legacyPackages.${system};
           # Formatter for `nix fmt`
           formatter = pkgs.nixfmt-rfc-style;
 
@@ -217,6 +209,7 @@
           specialArgs = {
             inherit (nixpkgs) lib;
             inherit nix-index-database;
+            pkgsUnstable = nixpkgs-unstable.legacyPackages."aarch64-darwin";
           };
         };
 
@@ -235,6 +228,7 @@
             inherit (nixpkgs) lib;
             inherit nix-index-database;
             nixSecrets = nix-secrets;
+            pkgsUnstable = nixpkgs-unstable.legacyPackages."x86_64-linux";
           };
         };
 

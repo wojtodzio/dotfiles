@@ -3,12 +3,13 @@
   config,
   lib,
   pkgs,
+  pkgsUnstable,
   ...
 }:
 
 let
   isDarwin = config.hostSpec.isDarwin;
-  unstable = pkgs.unstable;
+  unstable = pkgsUnstable;
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";

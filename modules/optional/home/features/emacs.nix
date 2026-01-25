@@ -3,12 +3,13 @@
   config,
   lib,
   pkgs,
+  pkgsUnstable,
   ...
 }:
 
 let
   isDarwin = config.hostSpec.isDarwin;
-  unstable = pkgs.unstable;
+  unstable = pkgsUnstable;
 in
 {
   programs.emacs = {

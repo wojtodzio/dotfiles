@@ -1,14 +1,14 @@
 # Darwin-specific emacs configuration (service, fonts)
-{ pkgs, ... }:
-
-let
-  unstable = pkgs.unstable;
-in
+{
+  pkgs,
+  pkgsUnstable,
+  ...
+}:
 {
   # Emacs daemon service (macOS)
   services.emacs = {
     enable = true;
-    package = unstable.emacs30;
+    package = pkgsUnstable.emacs30;
   };
 
   # Fonts for emacs

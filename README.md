@@ -97,8 +97,9 @@ ssh -A wojtek@posejdon "cd ~/dotfiles-deploy && sudo nixos-rebuild switch --flak
 - **Auto-loading Overlays**: Drop `.nix` files in `overlays/` to auto-load
 - **Modular Config**: Core and optional feature modules for reuse
 - **Metadata-Driven Config**: `hostSpec` flags for conditional configuration
+- **Hybrid Package Sets**: Stable `pkgs` with unstable `pkgsUnstable` for newer software
 - **Task Runner**: Nix apps for common workflows
-- **Lint/Format Tooling**: `nixfmt-rfc-style`, `statix`, `deadnix` with pre-commit hooks
+- **Lint/Format Tooling**: `nixfmt-tree`, `nixfmt-rfc-style`, `statix`, `deadnix` with pre-commit hooks
 
 ## Secrets
 
@@ -109,12 +110,23 @@ Secrets are managed with [agenix](https://github.com/ryantm/agenix) and stored i
 
 Secrets are encrypted with host SSH keys and decrypted at runtime to `/run/agenix/`.
 
+## Unstable Packages
+
+Use `pkgsUnstable` when you need newer software than the stable `pkgs` set.
+
+```nix
+{ pkgsUnstable, ... }:
+{
+  home.packages = [ pkgsUnstable.bun ];
+}
+```
+
 ## Common Tasks
 
 ```bash
 # Using Nix apps (recommended)
 nix run .#check
-nix run .#fmt
+nix run .#fmt # runs nixfmt-tree across the repo
 nix run .#update
 nix run .#build-macbook
 nix run .#switch-macbook

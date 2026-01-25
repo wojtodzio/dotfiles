@@ -3,6 +3,7 @@
   pkgs,
   nixSecrets,
   nix-index-database,
+  pkgsUnstable,
   ...
 }:
 
@@ -77,6 +78,9 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    extraSpecialArgs = {
+      inherit pkgsUnstable;
+    };
     users.wojtek = {
       imports = [
         nix-index-database.homeModules.default

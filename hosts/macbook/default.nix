@@ -2,6 +2,7 @@
   pkgs,
   config,
   nix-index-database,
+  pkgsUnstable,
   ...
 }:
 
@@ -50,6 +51,9 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    extraSpecialArgs = {
+      inherit pkgsUnstable;
+    };
   };
 
   users.users.wojtek = {
