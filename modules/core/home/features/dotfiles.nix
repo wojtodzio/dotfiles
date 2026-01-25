@@ -1,10 +1,5 @@
 # Dotfiles (pryrc, psqlrc, etc.)
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+_:
 
 {
   home.file = {

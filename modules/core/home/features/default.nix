@@ -1,10 +1,5 @@
 # Core Home Manager features (shared across all hosts)
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+_:
 
 {
   imports = [
