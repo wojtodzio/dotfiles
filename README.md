@@ -56,12 +56,34 @@ ssh -A wojtek@posejdon "cd ~/dotfiles-deploy && sudo nixos-rebuild switch --flak
 │       ├── services.nix   # SSH, ZFS, system services
 │       └── hardware-configuration.nix
 ├── modules/
-│   ├── darwin/            # macOS-specific modules
-│   │   ├── emacs.nix
-│   │   └── pkgs/          # Custom darwin packages
-│   ├── nixos/             # NixOS-specific modules (future)
-│   └── shared/            # Shared across hosts
-│       └── shell.nix      # Shell config, packages
+│   ├── core/
+│   │   ├── host-spec.nix  # Host metadata flags
+│   │   └── home/
+│   │       ├── default.nix
+│   │       └── features/
+│   │           ├── default.nix
+│   │           ├── shell.nix
+│   │           ├── git.nix
+│   │           ├── programs.nix
+│   │           ├── packages.nix
+│   │           └── dotfiles.nix
+│   ├── optional/
+│   │   ├── darwin/
+│   │   │   ├── emacs.nix
+│   │   │   └── home.nix
+│   │   ├── home/
+│   │   │   └── features/
+│   │   │       ├── default.nix
+│   │   │       ├── emacs.nix
+│   │   │       ├── neovim.nix
+│   │   │       └── yazi.nix
+│   │   └── nixos/
+│   │       └── home.nix
+│   ├── shared/
+│   │   └── dotfiles/      # Shared dotfiles
+│   └── darwin/
+│       └── pkgs/
+│           └── pinentry-touchid.nix
 └── overlays/
     ├── default.nix        # Auto-loader for overlays
     └── pinentry-touchid.nix
@@ -73,7 +95,10 @@ ssh -A wojtek@posejdon "cd ~/dotfiles-deploy && sudo nixos-rebuild switch --flak
 - **Determinate Nix**: Uses Determinate's Nix distribution with FlakeHub
 - **Secrets Management**: agenix with private `nix-secrets` repo
 - **Auto-loading Overlays**: Drop `.nix` files in `overlays/` to auto-load
-- **Modular Config**: Split by domain (networking, services, hardware)
+- **Modular Config**: Core and optional feature modules for reuse
+- **Metadata-Driven Config**: `hostSpec` flags for conditional configuration
+- **Task Runner**: Nix apps for common workflows
+- **Lint/Format Tooling**: `nixfmt-rfc-style`, `statix`, `deadnix` with pre-commit hooks
 
 ## Secrets
 
@@ -87,17 +112,19 @@ Secrets are encrypted with host SSH keys and decrypted at runtime to `/run/ageni
 ## Common Tasks
 
 ```bash
-# Update flake inputs
-cd ~/dotfiles && nix flake update
+# Using Nix apps (recommended)
+nix run .#check
+nix run .#fmt
+nix run .#update
+nix run .#build-macbook
+nix run .#switch-macbook
+nix run .#build-posejdon
+nix run .#switch-posejdon
 
-# Check configuration
-nix flake check
-
-# Build without switching (macbook)
-nix build .#darwinConfigurations.macbook.system
-
-# Build without switching (posejdon)
-nix build .#nixosConfigurations.posejdon.config.system.build.toplevel
+# Lint/format
+nix develop -c pre-commit run --all-files
+nix develop -c statix check .
+nix develop -c deadnix .
 
 # Garbage collection
 nix-collect-garbage -d
