@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+_:
 
 {
   # Use the systemd-boot EFI boot loader.

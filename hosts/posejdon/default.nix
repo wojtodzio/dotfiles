@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   nixSecrets,
   nix-index-database,
