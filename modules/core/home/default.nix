@@ -13,10 +13,11 @@
     ./git.nix
     ./programs.nix
     ./packages.nix
-    ./yazi.nix
-    ./neovim.nix
-    ./emacs.nix
     ./dotfiles.nix
+    # Optional modules (moved to modules/optional/home/)
+    ../../optional/home/yazi.nix
+    ../../optional/home/neovim.nix
+    ../../optional/home/emacs.nix
   ];
 
   # Common home-manager settings

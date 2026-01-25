@@ -71,8 +71,8 @@
     users.wojtek = {
       imports = [
         nix-index-database.homeModules.default
-        ../../modules/shared/home
-        ../../modules/nixos/home.nix
+        ../../modules/core/home
+        ../../modules/optional/nixos/home.nix
       ];
     };
   };

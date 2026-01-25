@@ -9,7 +9,7 @@
 {
   imports = [
     ./system.nix
-    ../../modules/darwin/emacs.nix
+    ../../modules/optional/darwin/emacs.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -56,8 +56,8 @@
   home-manager.users.wojtek = {
     imports = [
       nix-index-database.homeModules.default
-      ../../modules/shared/home
-      ../../modules/darwin/home.nix
+      ../../modules/core/home
+      ../../modules/optional/darwin/home.nix
     ];
   };
 
