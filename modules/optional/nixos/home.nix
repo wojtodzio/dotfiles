@@ -1,7 +1,5 @@
 # NixOS-specific home-manager configuration
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
