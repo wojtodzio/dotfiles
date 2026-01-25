@@ -31,11 +31,14 @@
       url = "git+https://github.com/wojtodzio/nix-secrets.git";
       flake = false;
     };
+
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
-    {
+    inputs@{
       self,
+      flake-parts,
       nixpkgs,
       nixpkgs-unstable,
       darwin,
@@ -47,12 +50,6 @@
       ...
     }:
     let
-      supportedSystems = [
-        "aarch64-darwin"
-        "x86_64-linux"
-      ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-
       # Overlays for both systems
       overlays = [
         # Unstable packages overlay
@@ -65,84 +62,93 @@
       ]
       ++ (import ./overlays);
     in
-    {
-      # Formatter for `nix fmt`
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
 
-      # Development shell with linting tools
-      devShells = forAllSystems (system: {
-        default = nixpkgs.legacyPackages.${system}.mkShell {
-          packages = with nixpkgs.legacyPackages.${system}; [
-            nixfmt-rfc-style
-            statix
-            deadnix
-            pre-commit
+      perSystem =
+        { pkgs, system, ... }:
+        {
+          # Formatter for `nix fmt`
+          formatter = pkgs.nixfmt-rfc-style;
+
+          # Development shell with linting tools
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              nixfmt-rfc-style
+              statix
+              deadnix
+              pre-commit
+            ];
+          };
+
+          # Checks for CI
+          checks = {
+            statix =
+              pkgs.runCommand "statix-check"
+                {
+                  buildInputs = [ pkgs.statix ];
+                  src = self;
+                }
+                ''
+                  cd $src
+                  statix check .
+                  touch $out
+                '';
+            deadnix =
+              pkgs.runCommand "deadnix-check"
+                {
+                  buildInputs = [ pkgs.deadnix ];
+                  src = self;
+                }
+                ''
+                  cd $src
+                  deadnix --fail -L .
+                  touch $out
+                '';
+          };
+        };
+
+      flake = {
+        # macOS configuration
+        darwinConfigurations.macbook = darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          modules = [
+            determinate.darwinModules.default
+            { nixpkgs.overlays = overlays; }
+            home-manager.darwinModules.home-manager
+            agenix.darwinModules.default
+            ./hosts/macbook/default.nix
+            { nix.registry.nixpkgs.flake = nixpkgs; }
           ];
+          specialArgs = {
+            inherit (nixpkgs) lib;
+            inherit nix-index-database;
+          };
         };
-      });
 
-      # Checks for CI
-      checks = forAllSystems (system: {
-        statix =
-          nixpkgs.legacyPackages.${system}.runCommand "statix-check"
-            {
-              buildInputs = [ nixpkgs.legacyPackages.${system}.statix ];
-              src = self;
-            }
-            ''
-              cd $src
-              statix check .
-              touch $out
-            '';
-        deadnix =
-          nixpkgs.legacyPackages.${system}.runCommand "deadnix-check"
-            {
-              buildInputs = [ nixpkgs.legacyPackages.${system}.deadnix ];
-              src = self;
-            }
-            ''
-              cd $src
-              deadnix --fail -L .
-              touch $out
-            '';
-      });
-
-      # macOS configuration
-      darwinConfigurations.macbook = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        modules = [
-          determinate.darwinModules.default
-          { nixpkgs.overlays = overlays; }
-          home-manager.darwinModules.home-manager
-          agenix.darwinModules.default
-          ./hosts/macbook/default.nix
-          { nix.registry.nixpkgs.flake = nixpkgs; }
-        ];
-        specialArgs = {
-          inherit (nixpkgs) lib;
-          inherit nix-index-database;
+        # NixOS configuration
+        nixosConfigurations.posejdon = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            determinate.nixosModules.default
+            { nixpkgs.overlays = overlays; }
+            home-manager.nixosModules.home-manager
+            agenix.nixosModules.default
+            ./hosts/posejdon/default.nix
+            { nix.registry.nixpkgs.flake = nixpkgs; }
+          ];
+          specialArgs = {
+            inherit (nixpkgs) lib;
+            inherit nix-index-database;
+            nixSecrets = nix-secrets;
+          };
         };
+
+        # Convenience aliases
+        darwinConfigurations.Wojciechs-MacBook-Pro = self.darwinConfigurations.macbook;
       };
-
-      # NixOS configuration
-      nixosConfigurations.posejdon = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          determinate.nixosModules.default
-          { nixpkgs.overlays = overlays; }
-          home-manager.nixosModules.home-manager
-          agenix.nixosModules.default
-          ./hosts/posejdon/default.nix
-          { nix.registry.nixpkgs.flake = nixpkgs; }
-        ];
-        specialArgs = {
-          inherit (nixpkgs) lib;
-          inherit nix-index-database;
-          nixSecrets = nix-secrets;
-        };
-      };
-
-      # Convenience aliases
-      darwinConfigurations.Wojciechs-MacBook-Pro = self.darwinConfigurations.macbook;
     };
 }
