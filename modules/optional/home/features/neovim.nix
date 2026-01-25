@@ -7,8 +7,9 @@
 
 let
   isDarwin = config.hostSpec.isDarwin;
+  enableNeovim = config.hostSpec.enableNeovim;
 in
-{
+lib.mkIf enableNeovim {
   programs.neovim = {
     enable = true;
     vimAlias = true;

@@ -2,8 +2,7 @@
 _:
 
 {
-  home.file = {
-    ".pryrc".source = ../../../shared/dotfiles/.pryrc;
-    ".psqlrc".source = ../../../shared/dotfiles/.psqlrc;
-  };
+  imports = [
+    ../../../shared/home
+  ];
 }

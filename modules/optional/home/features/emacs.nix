@@ -9,9 +9,10 @@
 
 let
   isDarwin = config.hostSpec.isDarwin;
+  enableEmacs = config.hostSpec.enableEmacs;
   unstable = pkgsUnstable;
 in
-{
+lib.mkIf enableEmacs {
   programs.emacs = {
     enable = true;
     package = unstable.emacs30;

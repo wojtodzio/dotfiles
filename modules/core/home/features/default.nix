@@ -8,7 +8,5 @@ _:
     ./programs.nix
     ./packages.nix
     ./dotfiles.nix
-    # Import optional features
-    ../../../optional/home/features
   ];
 }

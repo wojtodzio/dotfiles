@@ -9,6 +9,7 @@
 
 let
   isDarwin = config.hostSpec.isDarwin;
+  enableYazi = config.hostSpec.enableYazi;
   unstable = pkgsUnstable;
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
@@ -17,7 +18,7 @@ let
     sha256 = "sha256-+akz8E6Fmk6KwmeZOePEm/KqfbDaKeL4wiUgtm12SAE=";
   };
 in
-{
+lib.mkIf enableYazi {
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;

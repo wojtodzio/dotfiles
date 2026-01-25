@@ -86,6 +86,7 @@
         nix-index-database.homeModules.default
         ../../modules/core/host-spec.nix
         ../../modules/core/home
+        ../../modules/optional/home/features
         ../../modules/optional/nixos/home.nix
       ];
       hostSpec = config.hostSpec;

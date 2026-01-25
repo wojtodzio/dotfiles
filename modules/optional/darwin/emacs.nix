@@ -1,10 +1,12 @@
 # Darwin-specific emacs configuration (service, fonts)
 {
+  config,
+  lib,
   pkgs,
   pkgsUnstable,
   ...
 }:
-{
+lib.mkIf config.hostSpec.enableEmacs {
   # Emacs daemon service (macOS)
   services.emacs = {
     enable = true;
