@@ -35,7 +35,6 @@
 
   # macOS-specific packages
   home.packages = with pkgs; [
-    nixfmt-rfc-style
     coreutils-prefixed
     gopass
     gopass-jsonapi

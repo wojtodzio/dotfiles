@@ -30,7 +30,7 @@
 
   # Determinate Nix configuration
   nix.settings = {
-    cores = 0;
+    eval-cores = 0;
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://devenv.cachix.org"
@@ -46,10 +46,13 @@
       "kvm"
       "gccarch-znver4"
     ];
-    trusted-users = [
-      "root"
-      "wojtek"
-    ];
+    trusted-users = [ "root" ];
+  };
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
   };
 
   # agenix secrets configuration

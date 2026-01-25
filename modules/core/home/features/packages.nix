@@ -41,33 +41,35 @@ in
       gping
       mtr
       speedtest-cli
+      cloudflared
+      dogdns
 
       # Development
       unstable.devenv
+      unstable.bun
       direnv
       python3 # Required by alias-tips zsh plugin
+      heroku
+      awscli2
+      terraform
 
       # Nix tools
       nixd
       comma
       cachix
+      nixfmt-rfc-style
 
       # Misc utilities
       hyperfine # benchmarking
       sd # sed alternative
       jc # json parser
       figlet
+      visidata
+      chafa
+      rustscan
     ]
     ++ lib.optionals isDarwin [
       # macOS-specific packages
-      heroku
-      dogdns
-      awscli2
       unixtools.watch
-      cloudflared
-      visidata
-      timg
-      rustscan
-      unstable.bun
     ];
 }
