@@ -78,6 +78,7 @@
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               nixfmt-rfc-style
+              nixfmt-tree
               statix
               deadnix
               pre-commit
@@ -127,7 +128,7 @@
               meta.description = "Format the flake with nix fmt";
               program = toString (
                 pkgs.writeShellScript "fmt" ''
-                  ${pkgs.nix}/bin/nix fmt
+                  ${pkgs.nixfmt-tree}/bin/nixfmt-tree .
                 ''
               );
             };
