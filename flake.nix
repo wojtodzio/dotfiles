@@ -109,6 +109,84 @@
                   touch $out
                 '';
           };
+
+          # Apps for common workflows
+          apps = {
+            check = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "check" ''
+                  ${pkgs.nix}/bin/nix flake check
+                ''
+              );
+            };
+
+            fmt = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "fmt" ''
+                  ${pkgs.nix}/bin/nix fmt
+                ''
+              );
+            };
+
+            update = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "update" ''
+                  ${pkgs.nix}/bin/nix flake update
+                ''
+              );
+            };
+
+            build-macbook = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "build-macbook" ''
+                  if [ "$(uname)" != "Darwin" ]; then
+                    echo "Error: build-macbook must run on macOS"
+                    exit 1
+                  fi
+                  ${pkgs.nix}/bin/nix build .#darwinConfigurations.macbook.system
+                ''
+              );
+            };
+
+            build-posejdon = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "build-posejdon" ''
+                  ${pkgs.nix}/bin/nix build .#nixosConfigurations.posejdon.config.system.build.toplevel
+                ''
+              );
+            };
+
+            switch-macbook = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "switch-macbook" ''
+                  if [ "$(uname)" != "Darwin" ]; then
+                    echo "Error: switch-macbook must run on macOS"
+                    exit 1
+                  fi
+                  darwin-rebuild switch --flake .#macbook
+                ''
+              );
+            };
+
+            switch-posejdon = {
+              type = "app";
+              program = toString (
+                pkgs.writeShellScript "switch-posejdon" ''
+                  if [ "$(uname)" = "Darwin" ]; then
+                    echo "Error: switch-posejdon must run on Linux (posejdon)"
+                    exit 1
+                  fi
+                  sudo nixos-rebuild switch --flake .#posejdon
+                ''
+              );
+            };
+          };
         };
 
       flake = {
