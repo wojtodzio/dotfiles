@@ -1,10 +1,5 @@
 # Optional Home Manager features (editors, file managers)
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+_:
 
 {
   imports = [
