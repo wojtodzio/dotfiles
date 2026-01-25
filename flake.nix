@@ -47,10 +47,16 @@
       ...
     }:
     let
+      supportedSystems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+
       # Overlays for both systems
       overlays = [
         # Unstable packages overlay
-        (final: prev: {
+        (final: _prev: {
           unstable = import nixpkgs-unstable {
             system = final.system;
             config.allowUnfree = true;
@@ -60,6 +66,47 @@
       ++ (import ./overlays);
     in
     {
+      # Formatter for `nix fmt`
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+
+      # Development shell with linting tools
+      devShells = forAllSystems (system: {
+        default = nixpkgs.legacyPackages.${system}.mkShell {
+          packages = with nixpkgs.legacyPackages.${system}; [
+            nixfmt-rfc-style
+            statix
+            deadnix
+            pre-commit
+          ];
+        };
+      });
+
+      # Checks for CI
+      checks = forAllSystems (system: {
+        statix =
+          nixpkgs.legacyPackages.${system}.runCommand "statix-check"
+            {
+              buildInputs = [ nixpkgs.legacyPackages.${system}.statix ];
+              src = self;
+            }
+            ''
+              cd $src
+              statix check .
+              touch $out
+            '';
+        deadnix =
+          nixpkgs.legacyPackages.${system}.runCommand "deadnix-check"
+            {
+              buildInputs = [ nixpkgs.legacyPackages.${system}.deadnix ];
+              src = self;
+            }
+            ''
+              cd $src
+              deadnix --fail -L .
+              touch $out
+            '';
+      });
+
       # macOS configuration
       darwinConfigurations.macbook = darwin.lib.darwinSystem {
         system = "aarch64-darwin";

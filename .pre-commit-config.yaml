@@ -1,0 +1,28 @@
+# Pre-commit hooks for Nix files
+# Run: nix develop -c pre-commit install
+# Manual: nix develop -c pre-commit run --all-files
+repos:
+  - repo: local
+    hooks:
+      - id: nixfmt
+        name: nixfmt
+        entry: nixfmt
+        language: system
+        files: '\.nix$'
+        description: Format Nix files with nixfmt-rfc-style
+
+      - id: statix
+        name: statix
+        entry: statix check
+        language: system
+        files: '\.nix$'
+        pass_filenames: false
+        description: Lint Nix files with statix
+
+      - id: deadnix
+        name: deadnix
+        entry: deadnix --fail -L
+        language: system
+        files: '\.nix$'
+        pass_filenames: true
+        description: Find dead code in Nix files (-L ignores lambda pattern names)

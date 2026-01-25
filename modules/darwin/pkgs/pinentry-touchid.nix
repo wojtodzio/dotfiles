@@ -12,7 +12,11 @@ buildGoModule rec {
     sha256 = "sha256-XMcJjVVAp5drLMVTShITl0v6uVazrG1/23dVerrsoj4";
   };
 
-  subPackages = [ "." "go-assuan" "sensor" ];
+  subPackages = [
+    "."
+    "go-assuan"
+    "sensor"
+  ];
   doCheck = false;
 
   NIX_CFLAGS_COMPILE = [

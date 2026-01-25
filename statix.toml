@@ -1,0 +1,7 @@
+# Statix configuration
+# W04 (inherit) and W20 (repeated keys) are valid NixOS module patterns
+# These are stylistic preferences, not bugs - the code is correct as-is
+disabled = [
+  "repeated_keys",      # W20: NixOS modules commonly use flat attribute paths
+  "manual_inherit_from" # W04: Explicit assignments are clearer in some contexts
+]
