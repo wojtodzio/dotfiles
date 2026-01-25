@@ -7,7 +7,7 @@
 }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = config.hostSpec.isDarwin;
   unstable = pkgs.unstable;
 in
 {

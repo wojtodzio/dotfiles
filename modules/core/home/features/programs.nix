@@ -7,7 +7,7 @@
 }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = config.hostSpec.isDarwin;
   iterm2_shell_integration = pkgs.fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2-shell-integration";

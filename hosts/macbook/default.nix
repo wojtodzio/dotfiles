@@ -8,9 +8,19 @@
 
 {
   imports = [
+    ../../modules/core/host-spec.nix
     ./system.nix
     ../../modules/optional/darwin/emacs.nix
   ];
+
+  hostSpec = {
+    isDarwin = true;
+    isServer = false;
+    hasGui = true;
+    enableEmacs = true;
+    enableNeovim = true;
+    enableYazi = true;
+  };
 
   nixpkgs.config.allowUnfree = true;
 
@@ -56,9 +66,11 @@
   home-manager.users.wojtek = {
     imports = [
       nix-index-database.homeModules.default
+      ../../modules/core/host-spec.nix
       ../../modules/core/home
       ../../modules/optional/darwin/home.nix
     ];
+    hostSpec = config.hostSpec;
   };
 
   # Combine user and system packages to fix missing completions

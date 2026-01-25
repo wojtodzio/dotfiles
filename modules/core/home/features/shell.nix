@@ -8,7 +8,7 @@
 
 let
   # Check if we're on darwin for macOS-specific config
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = config.hostSpec.isDarwin;
 in
 {
   programs.zsh = {

@@ -9,11 +9,21 @@
 
 {
   imports = [
+    ../../modules/core/host-spec.nix
     ./hardware-configuration.nix
     ./hardware.nix
     ./networking.nix
     ./services.nix
   ];
+
+  hostSpec = {
+    isDarwin = false;
+    isServer = true;
+    hasGui = false;
+    enableEmacs = true;
+    enableNeovim = true;
+    enableYazi = true;
+  };
 
   time.timeZone = "Europe/Warsaw";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -71,9 +81,11 @@
     users.wojtek = {
       imports = [
         nix-index-database.homeModules.default
+        ../../modules/core/host-spec.nix
         ../../modules/core/home
         ../../modules/optional/nixos/home.nix
       ];
+      hostSpec = config.hostSpec;
     };
   };
 

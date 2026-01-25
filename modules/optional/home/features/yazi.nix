@@ -7,7 +7,7 @@
 }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
+  isDarwin = config.hostSpec.isDarwin;
   unstable = pkgs.unstable;
   yazi-plugins = pkgs.fetchFromGitHub {
     owner = "yazi-rs";
